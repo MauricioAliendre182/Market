@@ -1,4 +1,5 @@
 version: "4.16.3"
+name: market-simulation
 
 services:
   db:
@@ -15,10 +16,10 @@ services:
       POSTGRES_PASSWORD: R2D2-333
     volumes:
       - postgres-data:/var/lib/postgresql/data
-  app-spring-boot:
+  spring-boot-app:
     build:
-      context: .
-      dockerfile: ./backend/Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile
     restart: always
     ports:
       - "8091:8091"
@@ -34,8 +35,15 @@ services:
       PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
       PGADMIN_DEFAULT_PASSWORD: "admin"
     ports:
-      - "80:80"
+      - "8081:80"
     depends_on:
       - db
+  angular-app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "80:80"
 volumes:
   postgres-data:

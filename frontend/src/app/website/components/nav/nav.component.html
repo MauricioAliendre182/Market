@@ -1,0 +1,68 @@
+<div class="show-mobile">
+  <div>
+    <button (click)="toggleMenu()">
+      <img src="./assets/svg/icon_menu.svg" alt="menu">
+    </button>
+    <a href="">
+      <img src="./assets/svg/logo_yard_sale.svg" alt="logo">
+    </a>
+    <a href="">
+      <img src="./assets/svg/icon_shopping_cart.svg" alt="logo">
+    </a>
+  </div>
+  <div class="side-menu" [class.active]="activeMenu">
+    <button (click)="toggleMenu()">Close</button>
+    <ul>
+      <li>
+        <!-- routerLink is the way of Angular to redirect a page
+        routerLinkActive is for CSS purposes, in this case show that this button is active-->
+        <a routerLinkActive="active" routerLink="home">All</a>
+      </li>
+      <li *ngFor="let item of categories">
+        <!-- property binding for routerLink because is dynamic, this is becuase we have
+        an id that we need to pass by
+        routerLinkActive is for CSS purposes, in this case show that this button is active-->
+        <a routerLinkActive="active" [routerLink]="['/category', item.categoryId]">{{ item.category }}</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="hide-mobile">
+  <div>
+    <nav>
+      <a class="logo" href="">
+        <img src="./assets/svg/logo_yard_sale.svg" alt="logo">
+      </a>
+      <ul>
+        <!-- routerLink to redirect to the page that we want
+         routerLinkActive is for CSS purposes, in this case show that this button is active-->
+        <li>
+          <a routerLinkActive="active" routerLink="home">All</a>
+        </li>
+        <li *ngFor="let item of categories">
+          <!-- property binding for routerLink because is dynamic, this is becuase we have
+          an id that we need to pass by
+          routerLinkActive is for CSS purposes, in this case show that this button is active -->
+          <a routerLinkActive="active" [routerLink]="['/category', item.categoryId]">{{ item.category }}</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="info">
+      <div class="account">
+        <button *ngIf="!profile; else elseBlock" (click)="login()">Login</button>
+        <ng-template #elseBlock>
+          <!-- Now we want to go to out profile when a login is produced -->
+           <a routerLink="/profile">{{ profile?.username }}</a>
+          <!-- Now we want to add a logout here -->
+           <button (click)="logout()">Logout</button>
+        </ng-template>
+      </div>
+      <div class="shopping-cart-container">
+        <a href="">
+          <img src="./assets/svg/icon_shopping_cart.svg" alt="logo">
+        </a>
+        <span class="counter">{{ counter | number }}</span>
+      </div>
+    </div>
+  </div>
+</div>

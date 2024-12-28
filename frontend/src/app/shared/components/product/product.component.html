@@ -1,0 +1,15 @@
+<div *ngIf="product.active">
+  <a [routerLink]="['/product', product.productId]">
+    <app-img [img]="product.imgUrl"></app-img>
+  </a>
+  <h2 style="font-weight: bold;">{{ product.price | currency:'BOB' }}</h2>
+  <p>{{ product.name}}</p>
+  <p>{{ product?.taxes | currency:"BOB"}}</p>
+  <p appHighlight> {{ product.category.category }}</p>
+  <!-- <button (click)="onShowDetail()" >See Details</button> -->
+  <!-- As now we are managing a query param, here we will use a routerLink
+  to include the query param
+  with a '.' in the routerLink is the current route (ex: ./home, ./category)-->
+  <a routerLink="." [queryParams]="{ product: product.productId}">See detail</a>
+  <button (click)="onAddToCart()">Add cart</button>
+</div>
