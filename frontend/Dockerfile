@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 COPY package.json package-lock.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Copy other files and folders to the working directory
 COPY . .
@@ -20,7 +20,7 @@ RUN npm run build --prod
 FROM nginx:alpine
 
 # Copy built Angular app files to Nginx HTML folder
-COPY --from=build /usr/src/app/dist/my-angular-app /usr/share/nginx/html
+COPY --from=build /usr/src/app/dist/my-market /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
