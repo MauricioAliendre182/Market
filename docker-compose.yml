@@ -1,0 +1,41 @@
+version: "4.16.3"
+
+services:
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    expose:
+      - 5432
+    environment:
+      POSTGRES_DB: market
+      POSTGRES_USER: root
+      POSTGRES_HOST: 0.0.0.0
+      POSTGRES_PASSWORD: R2D2-333
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+  app-spring-boot:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+    restart: always
+    ports:
+      - "8091:8091"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/market
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: R2D2-333
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+volumes:
+  postgres-data:
