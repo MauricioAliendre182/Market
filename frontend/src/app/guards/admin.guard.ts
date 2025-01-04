@@ -23,7 +23,6 @@ export const adminGuard: CanActivateFn = (
   return authService.user$
   .pipe(
     map(user => {
-      // See if the role is ADMIN
       if(user?.roles.includes("ROLE_ADMIN")) {
         // In case we have the role of ADMIN we will allow that the route is accessed
         return true;

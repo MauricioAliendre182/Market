@@ -31,6 +31,18 @@ public class ProductRepository implements ProductRepositoryDTO {
     }
 
     @Override
+    public List<Product> getAllWithLimitAndOffset(int offset, int limit) {
+        List<DomainProduct> products = productCrudRepository.findAllWithLimitAndOffset(offset, limit);
+        return mapper.toProducts(products);
+    }
+
+    @Override
+    public Optional<List<Product>> getByCategoryWithLimitAndOffset(int categoryId, int offset, int limit) {
+        List<DomainProduct> products = productCrudRepository.findAllWithLimitAndOffsetAndCategory(categoryId, offset, limit);
+        return Optional.of(mapper.toProducts(products));
+    }
+
+    @Override
     public Optional<List<Product>> getByCategory(int categoryId) {
         List<DomainProduct> products = productCrudRepository.findByIdCategoryOrderByNameAsc(categoryId);
         return Optional.of(mapper.toProducts(products));

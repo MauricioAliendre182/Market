@@ -25,8 +25,13 @@ public class ProductController {
     @GetMapping()
     @Operation(summary = "Get all supermarket products")
     @ApiResponse(responseCode = "200", description = "OK")
-    public ResponseEntity<List<Product>> getAll() {
-        return new ResponseEntity<>(productService.getAll(), HttpStatus.OK);
+    public ResponseEntity<List<Product>> getAll(
+            @Parameter(description = "The offset to start getting the products", required = false, example = "1")
+            @RequestParam(defaultValue = "0") int offset,
+            @Parameter(description = "The limit of the registers that are recovered", required = false, example = "9")
+            @RequestParam(defaultValue = "10") int limit
+    ) {
+        return new ResponseEntity<>(productService.getAll(offset, limit), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -52,9 +57,13 @@ public class ProductController {
     })
     public ResponseEntity<List<Product>> getByCategory(
             @Parameter(description = "The id of the category", required = true, example = "3")
-            @PathVariable("categoryId") int categoryId
+            @PathVariable("categoryId") int categoryId,
+            @Parameter(description = "The offset to start getting the products", required = false, example = "1")
+            @RequestParam(defaultValue = "0") int offset,
+            @Parameter(description = "The limit of the registers that are recovered", required = false, example = "9")
+            @RequestParam(defaultValue = "10") int limit
     ) {
-        List<Product> products = productService.getByCategory(categoryId).orElse(null);
+        List<Product> products = productService.getByCategory(categoryId, offset, limit).orElse(null);
 
         return products != null && !products.isEmpty() ?
                 new ResponseEntity<>(products, HttpStatus.OK)

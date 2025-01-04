@@ -11,6 +11,8 @@ public interface ProductRepositoryDTO {
     // Name of the methods that we want to implement in any of the repositories related
     // to products
     List<Product> getAll();
+    List<Product> getAllWithLimitAndOffset(int offset, int limit);
+    Optional<List<Product>> getByCategoryWithLimitAndOffset(int categoryId, int offset, int limit);
     Optional<List<Product>> getByCategory(int categoryId);
     Optional<List<Product>> getScarceProducts(int quantity);
     Optional<Product> getProduct(int productId);

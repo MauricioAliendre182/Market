@@ -3,6 +3,7 @@ package com.project.market.domain.service;
 import com.project.market.domain.dto.Product;
 import com.project.market.domain.repository.ProductRepositoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,16 +19,16 @@ public class ProductService {
     @Autowired
     private ProductRepositoryDTO productRepositoryDTO;
 
-    public List<Product> getAll() {
-        return productRepositoryDTO.getAll();
+    public List<Product> getAll(int offset, int limit) {
+        return productRepositoryDTO.getAllWithLimitAndOffset(offset, limit);
     }
 
     public Optional<Product> getProduct(int productId) {
         return productRepositoryDTO.getProduct(productId);
     }
 
-    public Optional<List<Product>> getByCategory(int categoryId) {
-        return productRepositoryDTO.getByCategory(categoryId);
+    public Optional<List<Product>> getByCategory(int categoryId, int offset, int limit) {
+        return productRepositoryDTO.getByCategoryWithLimitAndOffset(categoryId, offset, limit);
     }
 
     public Product save(Product product) {

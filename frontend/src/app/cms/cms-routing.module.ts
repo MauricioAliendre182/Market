@@ -13,7 +13,7 @@ const routes: Routes = [
       // Manage the redirection
       {
         path: '',
-        redirectTo: 'grid',
+        redirectTo: '/grid',
         pathMatch: 'full'
       },
       {

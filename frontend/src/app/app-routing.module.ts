@@ -21,10 +21,10 @@ const routes: Routes = [
   // Here we need to render CmsModule
   {
     path: 'cms',
-    // this route only needs to be accessed by admin users, hence we use the function guard adminGuard
-    canActivate: [ adminGuard ],
     // This is a lazy loading to bring our module CmsModule
-    loadChildren: () => import('./cms/cms.module').then(m => m.CmsModule)
+    loadChildren: () => import('./cms/cms.module').then(m => m.CmsModule),
+    // this route only needs to be accessed by admin users, hence we use the function guard adminGuard
+    canActivate: [ adminGuard ]
   },
   // This is a global redirection
   {
