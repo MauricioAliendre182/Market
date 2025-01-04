@@ -1,7 +1,7 @@
 package com.project.market.web.controller;
 
 import com.project.market.domain.dto.Category;
-import com.project.market.domain.service.CategoryService;;
+import com.project.market.domain.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

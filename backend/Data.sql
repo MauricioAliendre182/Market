@@ -67,11 +67,11 @@ INSERT INTO clientes VALUES ('983824', 'Cl 2 # 22 - 22', 3019392466, 'nico@cope.
 
 -- COMPRA
 INSERT INTO compras VALUES (1, '', TO_TIMESTAMP('10/08/1992 17:30:00','DD/MM/YYYY HH24:MI:SS'), '4546221', 'E', 'P');
-INSERT INTO compras_productos VALUES (1, 1, 10, true, 3000);
-INSERT INTO compras_productos VALUES (36, 1, 1, true, 40000);
-INSERT INTO compras_productos VALUES (27, 1, 1, true, 9000);
-INSERT INTO compras_productos VALUES (49, 1, 2, true, 16400);
-INSERT INTO compras_productos VALUES (24, 1, 1, true, 4000);
+INSERT INTO compras_productos VALUES (1, 10, true, 3000, 1);
+INSERT INTO compras_productos VALUES (36, 1, true, 40000, 1);
+INSERT INTO compras_productos VALUES (27, 1, true, 9000, 1);
+INSERT INTO compras_productos VALUES (49, 2, true, 16400, 1);
+INSERT INTO compras_productos VALUES (24, 1, true, 4000, 1);
 
 -- SE REINICIAN LAS SECUENCIAS SEGÚN LOS DATOS INICIALES
 SELECT setval('public.productos_id_producto_seq', 50, true);

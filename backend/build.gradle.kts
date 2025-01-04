@@ -50,8 +50,8 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql:42.6.0")
 
 	// MapStruct for DTO mappings
-	implementation("org.mapstruct:mapstruct:1.5.6.Final")
-	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.6.Final")
+	implementation("org.mapstruct:mapstruct:1.5.5.Final")
+	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 
 	// JUnit for testing
 	testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
