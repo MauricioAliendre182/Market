@@ -12,8 +12,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class TokenUtils {
-    private static String ACCESS_TOKEN_SECRET;
-    private static long ACCESS_TOKEN_VALIDITY_SECONDS;
+    private final static String ACCESS_TOKEN_SECRET;
+    private final static long ACCESS_TOKEN_VALIDITY_SECONDS;
 
     static {
         try {
@@ -24,28 +24,36 @@ public class TokenUtils {
         }
     }
 
-    public static String createToken(String name, String username) {
+    public static String createToken(String name, String username, Integer userId) {
         long expirationTime = ACCESS_TOKEN_VALIDITY_SECONDS + 1_000;
-        Date expirationDate = new Date(System.currentTimeMillis() + expirationTime);
+        long currentDateTime = System.currentTimeMillis();
+        Date issuedAtDate = new Date(currentDateTime);
+        Date expirationDate = new Date(currentDateTime + expirationTime);
 
         Map<String, Object> extra = new HashMap<>();
         extra.put("name", name);
 
         return Jwts.builder()
-                .setSubject(username)
-                .setExpiration(expirationDate)
-                .addClaims(extra)
+                .subject(username)
+                .issuedAt(issuedAtDate)
+                .expiration(expirationDate)
+                .claims(extra)
+                // Custom claim to get the token
+                .claim("userId", userId)
                 .signWith(Keys.hmacShaKeyFor(ACCESS_TOKEN_SECRET.getBytes(StandardCharsets.UTF_8)))
                 .compact();
     }
 
     public static UsernamePasswordAuthenticationToken getAuthentication(String token) {
         try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(ACCESS_TOKEN_SECRET.getBytes(StandardCharsets.UTF_8))
+            // Get all the claims the token
+            // We need to see if the Sign matches
+            // We parse the claims signed and finaly we get the payload (not the body as previous versions with getBody())
+            Claims claims = Jwts.parser()
+                    .verifyWith(Keys.hmacShaKeyFor(ACCESS_TOKEN_SECRET.getBytes(StandardCharsets.UTF_8)))
                     .build()
-                    .parseClaimsJws(token)
-                    .getBody();
+                    .parseSignedClaims(token)
+                    .getPayload();
             String username = claims.getSubject();
 
             return new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());

@@ -12,7 +12,6 @@ public class DomainUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idUser;
-
     private String name;
     private String username;
     private String password;

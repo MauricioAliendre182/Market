@@ -53,7 +53,8 @@ const routes: Routes = [
     // other page that contains a chunk, QuickLink will pre-load it under the hood because it is visible to the
     // user
     // Now we need to enable this QuicklinkModule in other modules where we need
-    preloadingStrategy: QuicklinkStrategy
+    preloadingStrategy: QuicklinkStrategy,
+    useHash: true
   })],
   // providers: [
   //   {

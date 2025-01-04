@@ -76,7 +76,7 @@ public class UserController {
             Authentication authentication =
                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginReq.getUsername(), loginReq.getPassword()));
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-            String token = TokenUtils.createToken(userDetails.getName(), userDetails.getUsername());
+            String token = TokenUtils.createToken(userDetails.getName(), userDetails.getUsername(), userDetails.getUserId());
             LoginRes loginRes = new LoginRes(userDetails.getUsername(),token);
 
             return new ResponseEntity<>(loginRes, HttpStatus.OK);

@@ -56,4 +56,8 @@ public class UserDetailsImpl implements UserDetails {
     public String getName() {
         return domainUser.getName();
     }
+
+    public Integer getUserId() {
+        return domainUser.getIdUser();
+    }
 }
