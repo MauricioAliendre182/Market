@@ -3,9 +3,11 @@ import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
-import { environment } from './../../environments/environment';
 import { UsersService } from './users.service';
-import { CreateUserDTO, User } from '../models/user.model';
+import { User } from '../models/user.model';
+import { mockAdminUser, mockCustomerUser } from './../../mocks/mockUser';
+import { mockEnvironment } from './../../environments/environment.mock';
+import { environment } from './../../environments/environment'
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -14,9 +16,7 @@ describe('UsersService', () => {
 
   // A mock environment is provided to replace the environment.API_URL used in the service.
   // The idea is to simulate a response without consulting a real API
-  const mockEnvironment = {
-    API_URL: 'http://mock-api.com',
-  };
+  // For that reason we have a mockEnvironment instead of the original environment
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -43,12 +43,6 @@ describe('UsersService', () => {
   });
 
   it('should send a POST request to create an admin', waitForAsync(() => {
-    const dto: CreateUserDTO = {
-      name: 'customer',
-      username: 'customer',
-      password: 'password123',
-    };
-
     const mockResponse: User = {
       idUser: 1,
       name: 'customer',
@@ -56,7 +50,7 @@ describe('UsersService', () => {
       password: '$2a$10$3ejY/i65aR6Kj1eA5BLAMebKhYYSMKyySN8qEtddXWZcSt5id9f7S',
     };
 
-    service.createAdmin(dto).subscribe((response) => {
+    service.createAdmin(mockAdminUser).subscribe((response) => {
       expect(response).toEqual(mockResponse);
     });
 
@@ -64,17 +58,11 @@ describe('UsersService', () => {
       `${mockEnvironment.API_URL}/market/api/user/signup/admin`
     );
     expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual(dto);
+    expect(req.request.body).toEqual(mockAdminUser);
     req.flush(mockResponse); // Mock the response
   }));
 
   it('should send a POST request to create a customer', waitForAsync (() => {
-    const dto: CreateUserDTO = {
-      name: 'customer',
-      username: 'customer',
-      password: 'password123',
-    };
-
     const mockResponse: User = {
       idUser: 1,
       name: 'customer',
@@ -83,7 +71,7 @@ describe('UsersService', () => {
     };
 
     // Check the observable produced
-    service.createCustomer(dto).subscribe((response) => {
+    service.createCustomer(mockCustomerUser).subscribe((response) => {
       expect(response).toEqual(mockResponse);
     });
 
@@ -91,7 +79,7 @@ describe('UsersService', () => {
       `${mockEnvironment.API_URL}/market/api/user/signup/customer`
     );
     expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual(dto);
+    expect(req.request.body).toEqual(mockCustomerUser);
     req.flush(mockResponse); // Mock the response
   }));
 });
