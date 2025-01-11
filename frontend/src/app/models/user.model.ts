@@ -3,7 +3,7 @@ export interface User {
   name: string;
   username: string;
   password: string;
-  roles: Array<'ROLE_CUSTOMER' | 'ROLE_ADMIN'>
+  // roles: Array<'ROLE_CUSTOMER' | 'ROLE_ADMIN'>
 }
 
 export interface CreateUserDTO extends Omit<User, "idUser" | "roles"> {
