@@ -4,8 +4,7 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { UsersService } from './users.service';
-import { User } from '../models/user.model';
-import { mockAdminUser, mockCustomerUser } from './../../mocks/mockUser';
+import { mockAdminUser, mockCustomerUser, mockResponseAdminUser, mockResponseCustomerUser } from './../../mocks/mockUser';
 import { mockEnvironment } from './../../environments/environment.mock';
 import { environment } from './../../environments/environment'
 
@@ -43,15 +42,8 @@ describe('UsersService', () => {
   });
 
   it('should send a POST request to create an admin', waitForAsync(() => {
-    const mockResponse: User = {
-      idUser: 1,
-      name: 'customer',
-      username: 'customer',
-      password: '$2a$10$3ejY/i65aR6Kj1eA5BLAMebKhYYSMKyySN8qEtddXWZcSt5id9f7S',
-    };
-
     service.createAdmin(mockAdminUser).subscribe((response) => {
-      expect(response).toEqual(mockResponse);
+      expect(response).toEqual(mockResponseAdminUser);
     });
 
     const req = httpMock.expectOne(
@@ -59,20 +51,13 @@ describe('UsersService', () => {
     );
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(mockAdminUser);
-    req.flush(mockResponse); // Mock the response
+    req.flush(mockResponseAdminUser); // Mock the response
   }));
 
   it('should send a POST request to create a customer', waitForAsync (() => {
-    const mockResponse: User = {
-      idUser: 1,
-      name: 'customer',
-      username: 'customer',
-      password: '$2a$10$3ejY/i65aR6Kj1eA5BLAMebKhYYSMKyySN8qEtddXWZcSt5id9f7S',
-    };
-
     // Check the observable produced
     service.createCustomer(mockCustomerUser).subscribe((response) => {
-      expect(response).toEqual(mockResponse);
+      expect(response).toEqual(mockResponseCustomerUser);
     });
 
     const req = httpMock.expectOne(
@@ -80,6 +65,6 @@ describe('UsersService', () => {
     );
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(mockCustomerUser);
-    req.flush(mockResponse); // Mock the response
+    req.flush(mockResponseCustomerUser); // Mock the response
   }));
 });

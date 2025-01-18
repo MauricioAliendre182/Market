@@ -3,37 +3,49 @@ package com.project.market.web.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.market.domain.dto.Client;
+import com.project.market.domain.service.ClientService;
+import com.project.market.utils.MapperMethods;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@WebAppConfiguration
 class ClientControllerTest {
     private final static String BASE_URL = "/clients";
 
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
+    @Mock
+    private ClientService clientService;
+
+    @InjectMocks
+    private ClientController clientController;
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        MockitoAnnotations.openMocks(this);
+        // This method only initializes the controller being tested without loading the full Spring context.
+        // It makes tests faster and avoids unnecessary dependencies.
+        mockMvc = MockMvcBuilders.standaloneSetup(clientController).build();
     }
 
     @Test
-    void getAll() throws Exception {
+    void getAllClients() throws Exception {
+        when(clientService.getAll()).thenReturn(List.of(buildClient()));
+
         MvcResult mockMvcResult = mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL)
 //                        .queryParam("enablePagination", "false")
                         .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -45,33 +57,36 @@ class ClientControllerTest {
     @Test
     void getClient() throws Exception {
         Client client = buildClient();
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(BASE_URL + "/save")
-                        .content(mapToJson(client))
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .accept(MediaType.APPLICATION_JSON_VALUE))
-                .andReturn();
+        when(clientService.getClient("7343167")).thenReturn(Optional.of(client));
 
         MvcResult mvcResultGet = mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL + "/7343167")
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
         assertEquals(200, mvcResultGet.getResponse().getStatus());
+        assertTrue(mvcResultGet.getResponse().getContentAsString().contains("Mauricio"));
     }
 
     @Test
-    void save() throws Exception {
+    void saveAClient() throws Exception {
         Client client = buildClient();
+        // we mock the behavior of real client service.
+        when(clientService.save(any(Client.class))).thenReturn(client);
+
+        // we call the controller’s /save endpoint, which in turn calls clientService.save(client), and Mockito returns the predefined client.
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(BASE_URL + "/save")
-                .content(mapToJson(client))
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON_VALUE))
+                        .content(MapperMethods.mapToJson(client))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
+
         assertEquals(201, mvcResult.getResponse().getStatus());
-        System.out.println(mvcResult.getResponse().getContentAsString());
-        assertTrue( mvcResult.getResponse().getContentAsString().contains("7343167"));
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("7343167"));
     }
 
     @Test
     void getAClientWithError() throws Exception {
+        when(clientService.getClient("100")).thenReturn(Optional.empty());
+
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL + "/100")
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
@@ -79,12 +94,19 @@ class ClientControllerTest {
     }
 
     @Test
-    void delete() {
-    }
+    void deleteAClient() throws Exception {
+        // doNothing() tells Mockito to do nothing when the delete("7343167") method is called.
+        // This is useful because we don’t want to actually delete anything from the database
+        // during the test. We're just mocking the behavior to simulate the method being called.
+        // If the method you're mocking is void (i.e., it doesn’t return anything), you use doNothing() to avoid exceptions
+        when(clientService.delete("7343167")).thenReturn(true);
 
-    private String mapToJson(Object object) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(object);
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.delete(BASE_URL + "/delete/7343167"))
+                .andReturn();
+
+        assertEquals(200, mvcResult.getResponse().getStatus());
+        // This line verifies that the delete() method of clientService was called exactly once with the parameter "7343167".
+        verify(clientService, times(1)).delete("7343167");
     }
 
     private Client buildClient() {
@@ -94,7 +116,7 @@ class ClientControllerTest {
         client.setLastName("Aliendre");
         client.setAddress("Sucre y Petot");
         client.setEmail("Maps@hotmail.com");
-        client.setCellPhone(Long.valueOf(60408425));
+        client.setCellPhone(60408425L);
 
         return client;
     }

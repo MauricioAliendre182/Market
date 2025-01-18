@@ -31,6 +31,9 @@ tasks.jacocoTestReport {
 	}
 }
 
+// Create a custom configuration for the Mockito agent
+val mockitoAgent = configurations.create("mockitoAgent")
+
 dependencies {
 	// Spring Boot dependencies (version managed by BOM)
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -47,7 +50,7 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3")
 
 	// PostgreSQL Database Driver
-	runtimeOnly("org.postgresql:postgresql:42.6.0")
+	runtimeOnly("org.postgresql:postgresql:42.7.2")
 
 	// MapStruct for DTO mappings
 	implementation("org.mapstruct:mapstruct:1.5.5.Final")
@@ -55,8 +58,19 @@ dependencies {
 
 	// JUnit for testing
 	testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+
+	// Mockito
+	testImplementation("org.mockito:mockito-core:5.14.2")
+
+	// Add Mockito agent for Java 21+ inline mocking
+	// reference: https://javadoc.io/doc/org.mockito/mockito-core/5.14.2/org/mockito/Mockito.html
+	mockitoAgent("org.mockito:mockito-core:5.14.2")  { isTransitive = false }
 }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+
+	// This tells the JVM to load the mockito-inline agent during the test run.
+	// This will handle the inline mocking feature, resolving the warning about self-attaching.
+	jvmArgs("-javaagent:${mockitoAgent.asPath}")
 }
