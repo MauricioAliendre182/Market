@@ -1,4 +1,4 @@
 export const mockEnvironment = {
   production: false,
-  API_URL: 'http://localhost:80'
+  API_URL: 'http://localhost:8091'
 };

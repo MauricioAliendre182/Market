@@ -4,7 +4,7 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { UsersService } from './users.service';
-import { mockAdminUser, mockCustomerUser, mockResponseAdminUser, mockResponseCustomerUser } from './../../mocks/mockUser';
+import { mockAdminUser, mockCustomerUser, mockResponseAdminUser, mockResponseCustomerUser } from '../../mocks/user.mock';
 import { mockEnvironment } from './../../environments/environment.mock';
 import { environment } from './../../environments/environment'
 
@@ -20,6 +20,7 @@ describe('UsersService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       // HttpClientTestingModule is imported to mock HTTP requests.
+      // Angular offers this module for testing -> equivalent HttpClient
       imports: [HttpClientTestingModule],
       // This is to override the default environment object used in your Angular application with a mocked version (mockEnvironment) during testing.
       //provide: Specifies the token to be overridden (environment in this case).
@@ -42,20 +43,27 @@ describe('UsersService', () => {
   });
 
   it('should send a POST request to create an admin', waitForAsync(() => {
+    // mockReponseAdminUser is what BE is supposed to return
     service.createAdmin(mockAdminUser).subscribe((response) => {
       expect(response).toEqual(mockResponseAdminUser);
     });
 
+    // http config
     const req = httpMock.expectOne(
       `${mockEnvironment.API_URL}/market/api/user/signup/admin`
     );
+
+    // with req.flush we return the data that we want
+    req.flush(mockResponseAdminUser); // Mock the response
+
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(mockAdminUser);
-    req.flush(mockResponseAdminUser); // Mock the response
+    httpMock.verify()
   }));
 
   it('should send a POST request to create a customer', waitForAsync (() => {
     // Check the observable produced
+    // mockReponseCustomerUser is what BE is supposed to return
     service.createCustomer(mockCustomerUser).subscribe((response) => {
       expect(response).toEqual(mockResponseCustomerUser);
     });
@@ -63,8 +71,12 @@ describe('UsersService', () => {
     const req = httpMock.expectOne(
       `${mockEnvironment.API_URL}/market/api/user/signup/customer`
     );
+
+    // with req.flush we return the data that we want
+    req.flush(mockResponseCustomerUser); // Mock the response
+
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(mockCustomerUser);
-    req.flush(mockResponseCustomerUser); // Mock the response
+    httpMock.verify();
   }));
 });
