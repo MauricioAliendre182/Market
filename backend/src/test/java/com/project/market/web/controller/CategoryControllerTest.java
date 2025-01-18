@@ -1,9 +1,7 @@
 package com.project.market.web.controller;
 
 import com.project.market.domain.dto.Category;
-import com.project.market.domain.dto.Client;
 import com.project.market.domain.service.CategoryService;
-import com.project.market.domain.service.ClientService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -22,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
-public class CategoryController {
+public class CategoryControllerTest {
     private final static String BASE_URL = "/category";
 
     private MockMvc mockMvc;
@@ -69,6 +67,4 @@ public class CategoryController {
         category.setActive(true);
         return category;
     }
-
-
 }

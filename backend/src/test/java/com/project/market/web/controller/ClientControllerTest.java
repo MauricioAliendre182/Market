@@ -1,7 +1,5 @@
 package com.project.market.web.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.market.domain.dto.Client;
 import com.project.market.domain.service.ClientService;
 import com.project.market.utils.MapperMethods;

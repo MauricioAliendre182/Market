@@ -30,13 +30,24 @@ jobs:
     - name: Run Tests with Gradle Wrapper
       run: |
         cd backend
-        ./gradlew test jacocoTestReport || true
+        ./gradlew test
 
     - name: Upload Test Reports
       uses: actions/upload-artifact@v3
       with:
-        name: test-reports
+        name: backen-test-reports
         path: backend/build/reports/tests
+    
+    - name: Run Tests with Gradle Wrapper
+      run: |
+        cd backend
+        ./gradlew build jacocoTestReport
+
+    - name: Upload JaCoCo Coverage Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: jacoco-report
+        path: backend/jacocoHtml
 
   frontend-tests:
     name: Run Frontend Unit Tests
@@ -59,7 +70,7 @@ jobs:
     - name: Run Angular Unit Tests
       run: |
         cd frontend
-        npm run test || true
+        npm run test
 
     - name: Upload Frontend Test Reports
       uses: actions/upload-artifact@v3
