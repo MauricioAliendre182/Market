@@ -26,11 +26,6 @@ jobs:
 
     - name: Grant execute permission to Gradle Wrapper
       run: chmod +x backend/gradlew
-    
-    - name: Build with Gradle Wrapper
-      run: |
-        cd backend
-        ./gradlew build
 
     - name: Run Tests with Gradle Wrapper
       run: |
@@ -93,8 +88,8 @@ jobs:
         distribution: 'temurin'
     - name: Grant execute permission to Gradle Wrapper
       run: chmod +x backend/gradlew
-      
+
     - name: Generate and submit dependency graph
       run: |
         cd backend
-        ./gradlew dependencyReport
+        ./gradlew dependencies
