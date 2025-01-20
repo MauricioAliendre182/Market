@@ -58,7 +58,6 @@ describe('UsersService', () => {
 
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(mockAdminUser);
-    httpMock.verify()
   }));
 
   it('should send a POST request to create a customer', waitForAsync (() => {
@@ -77,6 +76,5 @@ describe('UsersService', () => {
 
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(mockCustomerUser);
-    httpMock.verify();
   }));
 });

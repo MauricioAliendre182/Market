@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit{
   }
 
   loadMore(pagination: LoadMorePages) {
-    this.productService.getProdcutByPage(pagination.limit, this.offset).subscribe(
+    this.productService.getProductByPage(pagination.limit, this.offset).subscribe(
       data => {
         console.log(data)
         this.products = [...this.products, ...data];

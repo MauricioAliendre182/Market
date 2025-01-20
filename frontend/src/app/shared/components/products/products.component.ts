@@ -146,7 +146,7 @@ export class ProductsComponent {
 
   deleteAProduct() {
     const id = this.productChosen.productId;
-    this.productService.deletezProduct(id)
+    this.productService.deleteProduct(id)
     .subscribe(() => {
       const productIndex = this.products.findIndex(item => item.productId === this.productChosen.productId)
       this.products.splice(productIndex, 1);
