@@ -63,7 +63,7 @@ const routes: Routes = [
       {
         path: 'register',
         // Here we need a guard here
-        // in this case to avoid exiting from a the /register page when a user is registering
+        // in this case to avoid exiting from the /register page when a user is registering
         canDeactivate: [ exitGuard ],
         component: RegisterComponent,
       },

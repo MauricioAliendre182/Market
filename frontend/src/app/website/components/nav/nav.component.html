@@ -49,7 +49,8 @@
     </nav>
     <div class="info">
       <div class="account">
-        <button *ngIf="!profile; else elseBlock" (click)="login()">Login</button>
+        <!-- <button *ngIf="!profile; else elseBlock" (click)="login()">Login</button> -->
+        <a *ngIf="!profile; else elseBlock" routerLink="/login">Login</a>
         <ng-template #elseBlock>
           <!-- Now we want to go to out profile when a login is produced -->
            <a routerLink="/profile">{{ profile?.username }}</a>

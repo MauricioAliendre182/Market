@@ -15,7 +15,7 @@ import { LayoutComponent } from './components/layout/layout.component';
 import { SharedModule } from '../shared/shared.module';
 import { CategoryModule } from './pages/category/category.module';
 import { QuicklinkModule } from 'ngx-quicklink';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -38,7 +38,8 @@ import { FormsModule } from '@angular/forms';
     CategoryModule,
     // Here we need to implement the QuickLink module to use its strategy
     QuicklinkModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class WebsiteModule { }
