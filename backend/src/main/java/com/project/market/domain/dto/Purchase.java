@@ -1,12 +1,10 @@
 package com.project.market.domain.dto;
 
-import com.project.market.domain.dto.PurchaseItem;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class Purchase {
-    private int purchaseId;
+    private Integer purchaseId;
     private String clientId;
     private LocalDateTime date;
     private String paymentMethod;
@@ -14,11 +12,11 @@ public class Purchase {
     private String state;
     private List<PurchaseItem> items;
 
-    public int getPurchaseId() {
+    public Integer getPurchaseId() {
         return purchaseId;
     }
 
-    public void setPurchaseId(int purchaseId) {
+    public void setPurchaseId(Integer purchaseId) {
         this.purchaseId = purchaseId;
     }
 

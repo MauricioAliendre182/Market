@@ -12,6 +12,7 @@ export const mockResponseAdminUser: User = {
   name: faker.person.firstName(),
   username: faker.internet.username(),
   password: faker.internet.password(),
+  roles: ['ROLE_ADMIN']
 };
 
 export const mockCustomerUser: CreateUserDTO = {
@@ -25,4 +26,5 @@ export const mockResponseCustomerUser: User = {
   name: faker.person.firstName(),
   username: faker.internet.username(),
   password: faker.internet.password(),
+  roles: ['ROLE_CUSTOMER']
 };

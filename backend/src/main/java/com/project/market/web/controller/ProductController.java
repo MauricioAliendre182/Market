@@ -23,6 +23,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping()
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
     @Operation(summary = "Get all supermarket products")
     @ApiResponse(responseCode = "200", description = "OK")
     public ResponseEntity<List<Product>> getAll(
@@ -34,7 +35,9 @@ public class ProductController {
         return new ResponseEntity<>(productService.getAll(offset, limit), HttpStatus.OK);
     }
 
+
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
     @Operation(summary = "Search a product with ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -50,6 +53,7 @@ public class ProductController {
     }
 
     @GetMapping("/category/{categoryId}")
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
     @Operation(summary = "Search a product by the category ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -75,8 +79,8 @@ public class ProductController {
 //    }
 
     @PostMapping("/save")
-    @Operation(summary = "Create a product")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Create a product")
     @ApiResponse(responseCode = "201", description = "Created")
     public ResponseEntity<Product> save(
             @RequestBody Product product
@@ -85,8 +89,8 @@ public class ProductController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
     @Operation(summary = "Update a product")
-    @PreAuthorize("hasRole('ADMIN')")
     @ApiResponse(responseCode = "200", description = "Update")
     public ResponseEntity<Product> update(
             @Parameter(description = "The id of the product", required = true, example = "7")
@@ -99,8 +103,8 @@ public class ProductController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @Operation(summary = "Delete a product by ID")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Delete a product by ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "404", description = "Product not found")

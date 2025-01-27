@@ -53,11 +53,12 @@ export class NavComponent implements OnInit, OnDestroy {
   login() {
     this.authService
       .loginAndGet({
-        username: 'admin',
-        password: 'admin',
+        username: 'admin2',
+        password: 'admin2',
       })
       .subscribe((profile) => {
         this.profile = profile;
+        this.storeService.storeClientId(profile);
       });
   }
 

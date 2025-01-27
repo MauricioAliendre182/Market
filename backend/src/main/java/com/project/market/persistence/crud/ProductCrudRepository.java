@@ -25,7 +25,7 @@ public interface ProductCrudRepository extends CrudRepository<DomainProduct, Int
     List<DomainProduct> findByIdCategoryOrderByNameAsc(int idCategory);
 
     // Get all the products by category and include the limit and offset
-    @Query(value = "SELECT * FROM productos WHERE id_categoria = :categoryId ORDER BY name ASC LIMIT :limit OFFSET :offset", nativeQuery = true)
+    @Query(value = "SELECT * FROM productos WHERE id_categoria = :categoryId ORDER BY nombre ASC LIMIT :limit OFFSET :offset", nativeQuery = true)
     List<DomainProduct> findAllWithLimitAndOffsetAndCategory(
             @Param("categoryId") int categoryId,
             @Param("offset") int offset,

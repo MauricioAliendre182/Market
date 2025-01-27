@@ -37,6 +37,10 @@ public class DomainPurchase {
     @OneToMany(mappedBy = "purchase", cascade = {CascadeType.ALL})
     private List<DomainPurchaseProduct> purchaseProducts;
 
+    // Hibernate may detect concurrent updates when persisting related entities (DomainPurchaseProduct) and expect version control.
+    @Version
+    private Integer version;
+
     public Integer getIdPurchase() {
         return idPurchase;
     }
@@ -99,5 +103,13 @@ public class DomainPurchase {
 
     public void setPurchaseProducts(List<DomainPurchaseProduct> purchaseProducts) {
         this.purchaseProducts = purchaseProducts;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

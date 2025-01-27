@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +29,7 @@ public class ClientController {
     private ClientService clientService;
 
     @GetMapping()
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
     @Operation(summary = "Get all the clients")
     @ApiResponse(responseCode = "200", description = "OK")
     public ResponseEntity<List<Client>> getAll() {
@@ -35,6 +37,7 @@ public class ClientController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_ADMIN')")
     @Operation(summary = "Search a client with ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -50,6 +53,7 @@ public class ClientController {
     }
 
     @PostMapping("/save")
+    @PreAuthorize("hasRole('ROLE_CUSTOMER') or hasRole('ROLE_ADMIN')")
     @Operation(summary = "Create a client")
     @ApiResponse(responseCode = "201", description = "Created")
     public ResponseEntity<Client> save(
@@ -59,6 +63,7 @@ public class ClientController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Delete a client with ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),

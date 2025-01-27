@@ -4,9 +4,8 @@ import com.project.market.persistence.entities.DomainUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
@@ -59,5 +58,9 @@ public class UserDetailsImpl implements UserDetails {
 
     public Integer getUserId() {
         return domainUser.getIdUser();
+    }
+
+    public Set<String> getRoles() {
+        return domainUser.getRoles();  // returns the set of roles (which is a Set<String>)
     }
 }

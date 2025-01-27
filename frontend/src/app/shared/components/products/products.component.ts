@@ -52,7 +52,7 @@ export class ProductsComponent {
 
   onAddToShoppingCart(product: Product) {
     this.storeService.addProduct(product)
-    this.total = this.storeService.getTotal();
+    this.total = this.storeService.getTotalPrice();
   }
 
   toggleProductDetail() {

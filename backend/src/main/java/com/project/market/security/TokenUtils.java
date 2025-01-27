@@ -6,10 +6,13 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TokenUtils {
     private final static String ACCESS_TOKEN_SECRET;
@@ -24,22 +27,26 @@ public class TokenUtils {
         }
     }
 
-    public static String createToken(String name, String username, Integer userId) {
+    public static String createToken(UserDetailsImpl userDetails) {
         long expirationTime = ACCESS_TOKEN_VALIDITY_SECONDS + 1_000;
         long currentDateTime = System.currentTimeMillis();
         Date issuedAtDate = new Date(currentDateTime);
         Date expirationDate = new Date(currentDateTime + expirationTime);
 
         Map<String, Object> extra = new HashMap<>();
-        extra.put("name", name);
+        extra.put("name", userDetails.getName());
+
+        // Convert Set<String> to List<String>
+        List<String> roles = new ArrayList<>(userDetails.getRoles());
 
         return Jwts.builder()
-                .subject(username)
+                .subject(userDetails.getUsername())
                 .issuedAt(issuedAtDate)
                 .expiration(expirationDate)
                 .claims(extra)
                 // Custom claim to get the token
-                .claim("userId", userId)
+                .claim("userId", userDetails.getUserId())
+                .claim("roles", roles)
                 .signWith(Keys.hmacShaKeyFor(ACCESS_TOKEN_SECRET.getBytes(StandardCharsets.UTF_8)))
                 .compact();
     }
@@ -56,7 +63,16 @@ public class TokenUtils {
                     .getPayload();
             String username = claims.getSubject();
 
-            return new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
+            // Extract roles from the claims (it's now a List of Strings)
+            List<String> roles = (List<String>) claims.get("roles");
+
+            // Convert roles to authorities
+            Collection<GrantedAuthority> authorities = roles.stream()
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+
+            // Create the authentication token
+            return new UsernamePasswordAuthenticationToken(username, null, authorities);
         } catch (JwtException e){
             return null;
         }

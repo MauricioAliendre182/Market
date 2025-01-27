@@ -35,6 +35,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("permitAll")
     @Operation(summary = "Search a user with ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -50,6 +51,7 @@ public class UserController {
     }
 
     @PostMapping("/signup/admin")
+    @PreAuthorize("permitAll")
     @Operation(summary = "Create an admin user")
     @ApiResponse(responseCode = "201", description = "Created")
     public ResponseEntity<User> saveAdmin(
@@ -59,6 +61,7 @@ public class UserController {
     }
 
     @PostMapping("/signup/customer")
+    @PreAuthorize("permitAll")
     @Operation(summary = "Create a customer user")
     @ApiResponse(responseCode = "201", description = "Created")
     public ResponseEntity<User> saveCustomer(
@@ -68,6 +71,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
+    @PreAuthorize("permitAll")
     @Operation(summary = "Login user")
     @ApiResponse(responseCode = "200", description = "User correctly logged in")
     public ResponseEntity login(
@@ -76,7 +80,7 @@ public class UserController {
             Authentication authentication =
                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginReq.getUsername(), loginReq.getPassword()));
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-            String token = TokenUtils.createToken(userDetails.getName(), userDetails.getUsername(), userDetails.getUserId());
+            String token = TokenUtils.createToken(userDetails);
             LoginRes loginRes = new LoginRes(userDetails.getUsername(),token);
 
             return new ResponseEntity<>(loginRes, HttpStatus.OK);
@@ -91,6 +95,7 @@ public class UserController {
     }
 
     @GetMapping("/profile")
+    @PreAuthorize("permitAll")
     @Operation(summary = "Verify the profile of the user")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Get the profile of a user"),
@@ -111,8 +116,8 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @Operation(summary = "Delete a user with ID")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Delete a user with ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "404", description = "User not found")

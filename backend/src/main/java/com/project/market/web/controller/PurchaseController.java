@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +27,9 @@ public class PurchaseController {
     @Autowired
     private PurchaseService purchaseService;
 
+    // TODO: Implement filters for this endpoint
     @GetMapping("/all")
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
     @Operation(summary = "Get all supermarket purchases")
     @ApiResponse(responseCode = "200", description = "OK")
     public ResponseEntity<List<Purchase>> getAll() {
@@ -34,6 +37,7 @@ public class PurchaseController {
     }
 
     @GetMapping("/client/{idClient}")
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
     @Operation(summary = "Search a purchase by client ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -51,6 +55,7 @@ public class PurchaseController {
     }
 
     @PostMapping("/save")
+    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
     @Operation(summary = "Create a purchase")
     @ApiResponse(responseCode = "201", description = "Created")
     public ResponseEntity<Purchase> save(@RequestBody Purchase purchase){
