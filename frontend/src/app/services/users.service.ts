@@ -19,4 +19,8 @@ export class UsersService {
   createCustomer(dto: CreateUserDTO) {
     return this.http.post<User>(`${this.url}/user/signup/customer`, dto)
   }
+
+  deleteAUser(userId: string) {
+    return this.http.delete<User>(`${this.url}/user/delete/${userId}`)
+  }
 }
