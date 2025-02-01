@@ -24,6 +24,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  // TODO: Fix the error logs when we have a user that has one role but not the other one
   isAdminRole(): boolean {
     return this.user?.roles.includes("ROLE_ADMIN") ?? false
   }

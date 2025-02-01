@@ -1,4 +1,8 @@
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from './../../environments/environment';
 import { checkTime } from '../interceptors/time.interceptor';
@@ -6,7 +10,7 @@ import { catchError, map, retry, throwError } from 'rxjs';
 import { Client } from '../models/client.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ClientService {
   private url = `${environment.API_URL}/market/api/clients`;
@@ -29,7 +33,7 @@ export class ClientService {
         map((clients) =>
           clients.map((client) => {
             return {
-              ...client
+              ...client,
             };
           })
         ),
@@ -42,12 +46,34 @@ export class ClientService {
           }
           return throwError(() => 'Ups..something was wrong');
         })
-    );
+      );
   }
 
   getAClientById(clientId: string) {
     return this.httpClient
       .get<Client>(`${this.url}/${clientId}`, { context: checkTime() })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 500) {
+            return throwError(() => 'Server is failing');
+          }
+          if (error.status === 404) {
+            return throwError(() => 'The client does not exist');
+          }
+          if (error.status === 403) {
+            return throwError(() => 'The access for this client is forbidden');
+          }
+          return throwError(() => 'Ups..something was wrong');
+        })
+      );
+  }
+
+  getAClientByEmail(email: string) {
+    return this.httpClient
+      .get<Client>(`${this.url}/email`, {
+        context: checkTime(),
+        params: { email: email }
+      })
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === 500) {
@@ -82,5 +108,4 @@ export class ClientService {
         })
       );
   }
-
 }

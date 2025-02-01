@@ -58,7 +58,7 @@ export class NavComponent implements OnInit, OnDestroy {
       })
       .subscribe((profile) => {
         this.profile = profile;
-        this.storeService.storeClientId(profile);
+        // this.storeService.storeClientId(profile);
       });
   }
 
@@ -79,6 +79,8 @@ export class NavComponent implements OnInit, OnDestroy {
     this.authService.logout();
     // We need to clear the profile too at the moment to close session
     this.profile = null;
+    // Clear localstorage
+    localStorage.clear()
     // Redirect me at /home page
     this.router.navigate(['/home']);
   }

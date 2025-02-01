@@ -48,12 +48,9 @@ export class MycartComponent {
       }));
     });
 
-    // this.storeService.userId$.subscribe((userId) => {
-    //   this.purchase.clientId = userId;
-    // });
-
-    // TODO: Not hardcode the client
-    this.purchase.clientId = '2552243'
+    this.storeService.clientId$.subscribe((clientId) => {
+      this.purchase.clientId = clientId
+    })
   }
 
   backProducts() {

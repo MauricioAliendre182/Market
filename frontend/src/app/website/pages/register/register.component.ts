@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { forkJoin, map, Observable } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { OnExit } from 'src/app/guards/exit.guard';
 import { Client } from 'src/app/models/client.model';
-import { CreateUserDTO, User } from 'src/app/models/user.model';
+import { CreateUserDTO, LoginAuth, LoginUser, User } from 'src/app/models/user.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { ClientService } from 'src/app/services/client.service';
+import { StoreService } from 'src/app/services/store.service';
+import { TokenService } from 'src/app/services/token.service';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -22,6 +25,9 @@ export class RegisterComponent implements OnExit {
     private fb: FormBuilder,
     private clientService: ClientService,
     private userService: UsersService,
+    private authService: AuthService,
+    private tokenService: TokenService,
+    private storeService: StoreService,
     private router: Router
   ) {
     this.signupForm = this.fb.group({
@@ -59,7 +65,7 @@ export class RegisterComponent implements OnExit {
     if (this.signupForm.valid) {
       console.log('User Data:', this.signupForm.value);
       const clientData: Client = {
-        clientId: String(this.signupForm.value.clientId),
+        clientId: String(this.signupForm.value.id),
         firstName: String(this.signupForm.value.firstname),
         lastName: String(this.signupForm.value.lastname),
         cellPhone: Number(this.signupForm.value.cellphone),
@@ -73,25 +79,49 @@ export class RegisterComponent implements OnExit {
         password: String(this.signupForm.value.password),
       };
 
-      forkJoin({
-        clientResponse: this.clientService.createAClient(clientData),
-        userResponse: this.userService.createCustomer(credentials),
-      }).subscribe({
-        next: () => {
-          this.router.navigate(['/login']);
-          alert('Signup Successful!');
-        },
-        error: (err) => {
-          this.errorMessage = `Something went wrong!`;
-        },
-      });
+      this.userService
+        .createCustomer(credentials)
+        .pipe(
+          // Once registration is successful, proceed to login
+          switchMap((registerResponse: User) => {
+            const loginUser: LoginUser = {
+              username: registerResponse.username,
+              password: credentials.password,
+            };
+            return this.authService.login(loginUser);
+          }),
+
+          // Once logged in, create the client
+          switchMap((loginResponse: any) => {
+            return this.clientService.createAClient(clientData);
+          }),
+
+          // Remove the token from Cookies
+          switchMap((clientResponse: Client) => {
+            return of(this.tokenService.removeToken());
+          }),
+
+          catchError((error) => {
+            this.errorMessage = `Something went wrong!`;
+            return of(null); // Return an observable that won't break the chain
+          })
+        )
+        .subscribe({
+          next: () => {
+            this.router.navigate(['/login']);
+            alert('Signup Successful!');
+          },
+        });
     }
   }
 
   // Let's implement the interface OnExit() here
   // and implement the logic here (use confirm())
   onExit() {
-    const rta = confirm('Are you sure to leave this page?');
-    return rta;
+    if (!this.signupForm.valid) {
+      const rta = confirm('Are you sure to leave this page?');
+      return rta;
+    }
+    return true
   }
 }

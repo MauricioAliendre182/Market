@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface ClientRepositoryDTO {
     List<Client> getAll();
     Optional<Client> getClient(String clientId);
+    Optional<Client> getAClientByEmail(String email);
     Client save(Client client);
     void delete(String clientId);
 }

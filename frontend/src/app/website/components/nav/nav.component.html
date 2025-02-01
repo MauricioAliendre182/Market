@@ -63,10 +63,15 @@
     </nav>
     <div class="info">
       <div class="account">
-        <!-- <button *ngIf="!profile; else elseBlock" (click)="login()">Login</button> -->
-        <a *ngIf="!profile; else elseBlock" routerLink="/login">Login</a>
-        <a *ngIf="!profile; else elseBlock" routerLink="/register">Register</a>
-        <ng-template #elseBlock>
+        <!-- The ng-container ensures no extra DOM elements are created. -->
+        <!-- Use ng-container when you need to group elements for a structural directive but don’t want to add extra HTML tags to the DOM. -->
+        <ng-container *ngIf="!profile; else profileContent">
+          <!-- <button *ngIf="!profile; else elseBlock" (click)="login()">Login</button> -->
+          <a routerLink="/login">Login</a>
+          <a routerLink="/register">Register</a>
+        </ng-container>
+        <!-- The ng-template only renders when profile exists. -->
+        <ng-template #profileContent>>
           <!-- Now we want to go to out profile when a login is produced -->
            <a routerLink="/profile">{{ profile?.username }}</a>
           <!-- Now we want to add a logout here -->

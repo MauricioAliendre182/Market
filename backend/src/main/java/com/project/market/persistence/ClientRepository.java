@@ -31,6 +31,11 @@ public class ClientRepository implements ClientRepositoryDTO {
     }
 
     @Override
+    public Optional<Client> getAClientByEmail(String email) {
+        return clientCrudRepository.findOneByEmail(email).map(client -> mapper.toClient(client));
+    }
+
+    @Override
     public Client save(Client client) {
         DomainClient domainClient = mapper.toDomainClient(client);
         return mapper.toClient(clientCrudRepository.save(domainClient));

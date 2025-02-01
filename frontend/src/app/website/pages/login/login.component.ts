@@ -1,34 +1,54 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { catchError, of, switchMap, throwError } from 'rxjs';
+import { Client } from 'src/app/models/client.model';
+import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { ClientService } from 'src/app/services/client.service';
+import { StoreService } from 'src/app/services/store.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
   loginForm: FormGroup;
   errorMessage = '';
+  profile: User | null = null;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private storeService: StoreService,
+    private clientService: ClientService,
+    private router: Router
+  ) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
   }
 
   login() {
     if (this.loginForm.valid) {
       const { username, password } = this.loginForm.value;
-      this.authService.loginAndGet({ username, password }).subscribe({
-        next: () => {
+      this.authService.loginAndGet({ username, password }).pipe(
+        switchMap((profile: User) => {
+          this.profile = profile;
+          this.storeService.storeName(profile);
+          return this.clientService.getAClientByEmail(profile.name);
+        })
+      ).subscribe({
+        next: (client: Client) => {
+          this.storeService.storeClientId(client);
           this.router.navigate(['/home']);
         },
         error: (err) => {
           this.errorMessage = 'Invalid username or password';
-        }
+          console.error(`The error is: ${err}`)
+        },
       });
     }
   }

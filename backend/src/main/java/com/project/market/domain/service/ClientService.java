@@ -21,6 +21,10 @@ public class ClientService {
         return clientRepositoryDTO.getClient(clientId);
     }
 
+    public Optional<Client> getAClientByEmail(String email) {
+        return clientRepositoryDTO.getAClientByEmail(email);
+    }
+
     public Client save(Client client) {
         return clientRepositoryDTO.save(client);
     }
