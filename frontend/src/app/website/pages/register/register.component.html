@@ -1,1 +1,65 @@
-<p>register works!</p>
+<div class="signup-container">
+  <form class="signup-form" [formGroup]="signupForm" (ngSubmit)="submit()">
+
+    <!-- Step 1: User Details -->
+    <div *ngIf="step === 1">
+      <h2>Sign Up - Step 1</h2>
+
+      <div class="form-group">
+        <label for="id">ID</label>
+        <input id="id" type="text" formControlName="id" />
+      </div>
+
+      <div class="form-group">
+        <label for="firstname">First Name</label>
+        <input id="firstname" type="text" formControlName="firstname" />
+      </div>
+
+      <div class="form-group">
+        <label for="lastname">Last Name</label>
+        <input id="lastname" type="text" formControlName="lastname" />
+      </div>
+
+      <div class="form-group">
+        <label for="cellphone">Cellphone</label>
+        <input id="cellphone" type="text" formControlName="cellphone" />
+      </div>
+
+      <div class="form-group">
+        <label for="address">Address</label>
+        <input id="address" type="text" formControlName="address" />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" />
+      </div>
+
+      <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+      <button type="button" (click)="nextStep()">Next</button>
+    </div>
+
+    <!-- Step 2: Account Credentials -->
+    <div *ngIf="step === 2">
+      <h2>Sign Up - Step 2</h2>
+
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input id="username" type="text" formControlName="username" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" type="password" formControlName="password" />
+      </div>
+
+      <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+      <div class="buttons">
+        <button type="button" (click)="previousStep()">Previous</button>
+        <button type="submit" [disabled]="signupForm.invalid">Submit</button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -20,6 +20,14 @@ export class UsersService {
     return this.http.post<User>(`${this.url}/user/signup/customer`, dto)
   }
 
+  getAUserById(userId: string) {
+    return this.http.get<User>(`${this.url}/user/${userId}`)
+  }
+
+  getAUserByUsername(username: string) {
+    return this.http.get<User>(`${this.url}/user/${username}`)
+  }
+
   deleteAUser(userId: string) {
     return this.http.delete<User>(`${this.url}/user/delete/${userId}`)
   }

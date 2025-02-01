@@ -1,0 +1,154 @@
+/* General container */
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 10px; /* Added padding for mobile screens */
+}
+
+/* Signup form */
+.signup-form {
+  width: 100%;
+  max-width: 400px;
+  background-color: #fff;
+  padding: 30px; /* Reduced padding for better responsiveness */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;  /* Prevents overflow */
+}
+
+/* Headings */
+.signup-form h2 {
+  text-align: center;
+  color: #4caf50;
+  margin-bottom: 20px;
+}
+
+/* Input fields */
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 5px;
+  display: block;
+}
+
+input {
+  width: 100%;
+  padding: 10px 40px; /* Adjusted padding for mobile */
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  background-color: #fafafa;
+  box-sizing: border-box;  /* Prevents overflow */
+}
+
+input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* Error Message */
+.error {
+  color: red;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Buttons */
+button {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+/* Next button */
+button[type="button"] {
+  background-color: #007bff;
+}
+
+button[type="button"]:hover {
+  background-color: #0056b3;
+}
+
+/* Previous button */
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+button[type="submit"] {
+  background-color: #28a745;
+}
+
+button[type="submit"]:hover {
+  background-color: #218838;
+}
+
+button[type="button"]:nth-child(1) {
+  background-color: #f44336;
+}
+
+button[type="button"]:nth-child(1):hover {
+  background-color: #d32f2f;
+}
+
+/* Media Queries for Responsiveness */
+@media screen and (max-width: 768px) {
+  .signup-form {
+    padding: 30px;
+  }
+
+  .signup-form h2 {
+    font-size: 1.75rem;
+  }
+
+  /* Adjusting the form container padding */
+  .signup-container {
+    padding: 10px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .signup-form {
+    padding: 20px;
+  }
+
+  .signup-form h2 {
+    font-size: 1.5rem;
+  }
+
+  /* Adjust input field padding */
+  input {
+    padding: 10px 20px;
+  }
+
+  /* Adjust button size for mobile */
+  button {
+    padding: 12px;
+    font-size: 1rem;
+  }
+
+  /* Ensure buttons still look good */
+  .buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

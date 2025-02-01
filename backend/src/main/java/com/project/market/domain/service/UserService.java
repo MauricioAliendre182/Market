@@ -2,7 +2,6 @@ package com.project.market.domain.service;
 
 import com.project.market.domain.dto.User;
 import com.project.market.domain.repository.UserRepositoryDTO;
-import com.project.market.persistence.entities.DomainUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +12,11 @@ public class UserService {
     @Autowired
     private UserRepositoryDTO userRepositoryDTO;
 
-    public Optional<DomainUser> getUser(int idUser) {
+    public Optional<User> getUser(int idUser) {
         return userRepositoryDTO.getAUserById(idUser);
     }
 
-    public Optional<DomainUser> getUserByUsername(String username) {
+    public Optional<User> getUserByUsername(String username) {
         return userRepositoryDTO.getAUserByUsername(username);
     }
 

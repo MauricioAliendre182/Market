@@ -24,6 +24,20 @@
         routerLinkActive is for CSS purposes, in this case show that this button is active-->
         <a routerLinkActive="active" [routerLink]="['/category', item.categoryId]">{{ item.category }}</a>
       </li>
+
+       <!-- User Account Links (Login/Register/Profile/Logout) -->
+       <li *ngIf="!profile">
+        <a routerLink="/login">Login</a>
+      </li>
+      <li *ngIf="!profile">
+        <a routerLink="/register">Register</a>
+      </li>
+      <li *ngIf="profile">
+        <a routerLink="/profile">{{ profile?.username }}</a>
+      </li>
+      <li *ngIf="profile">
+        <button (click)="logout()">Logout</button>
+      </li>
     </ul>
   </div>
 </div>
@@ -51,6 +65,7 @@
       <div class="account">
         <!-- <button *ngIf="!profile; else elseBlock" (click)="login()">Login</button> -->
         <a *ngIf="!profile; else elseBlock" routerLink="/login">Login</a>
+        <a *ngIf="!profile; else elseBlock" routerLink="/register">Register</a>
         <ng-template #elseBlock>
           <!-- Now we want to go to out profile when a login is produced -->
            <a routerLink="/profile">{{ profile?.username }}</a>

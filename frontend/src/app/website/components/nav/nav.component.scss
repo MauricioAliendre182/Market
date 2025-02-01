@@ -30,6 +30,8 @@
       margin-top: 20px;
       margin-left: 50px;
     }
+
+    /* Menu item links */
     a {
       float: left;
       color: black;
@@ -43,21 +45,33 @@
         font-weight: bold;
       }
     }
-    a:hover {
-      background-color: #ddd;
-      color: black;
-    }
-    a.active {
-      background-color: dodgerblue;
+
+    /* Profile link */
+    a.profile-link {
+      background-color: #ff9800;
       color: white;
     }
+
+    /* Logout button */
     button {
       cursor: pointer;
       font-size: 20px;
       color: black;
       background-color: #f1f1f1;
-      padding: 10px 15px 15px 15px;
+      padding: 10px 15px;
       border: none;
+    }
+
+    /* Styling for hover */
+    a:hover, button:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+    /* Active link styles */
+    a.active {
+      background-color: dodgerblue;
+      color: white;
     }
   }
 }
@@ -129,6 +143,66 @@
       margin-right: .5em;
     }
   }
+}
+
+.account {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Space between buttons */
+}
+
+/* General button styles */
+.account a,
+.account button {
+  display: inline-block;
+  padding: 10px 15px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  transition: 0.3s ease-in-out;
+  border: none;
+  cursor: pointer;
+}
+
+/* Login & Register buttons */
+.account a {
+  color: white;
+  text-align: center;
+}
+
+.account a:first-child {
+  background-color: #007bff; /* Blue for Login */
+}
+
+.account a:last-child {
+  background-color: #28a745; /* Green for Register */
+}
+
+/* Profile & Logout section */
+.account a.profile-link {
+  background-color: #ff9800; /* Orange for profile */
+  color: white;
+  padding: 10px 15px;
+}
+
+.account button.logout {
+  background-color: #f44336; /* Red for logout */
+  color: white;
+}
+
+/* Hover effects */
+.account a:hover,
+.account button.logout:hover {
+  opacity: 0.8;
+}
+
+/* If username is too long, truncate it */
+.account a.profile-link {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Medium only */

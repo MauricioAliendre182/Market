@@ -2,7 +2,6 @@ package com.project.market.web.controller;
 
 import com.project.market.domain.dto.User;
 import com.project.market.domain.service.UserService;
-import com.project.market.persistence.entities.DomainUser;
 import com.project.market.security.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,17 +34,33 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("permitAll")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Search a user with ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
-    public ResponseEntity<DomainUser> getClient(
+    public ResponseEntity<User> getAUserById(
             @Parameter(description = "The id of the user", required = true, example = "2")
             @PathVariable("id") Integer idUser
     ) {
         return userService.getUser(idUser)
+                .map(client -> new ResponseEntity<>(client, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/{username}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Search a user using its username")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    public ResponseEntity<User> getAUserByUsername(
+            @Parameter(description = "The username of the user", required = true, example = "maps182")
+            @PathVariable("username") String username
+    ) {
+        return userService.getUserByUsername(username)
                 .map(client -> new ResponseEntity<>(client, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }

@@ -15,6 +15,7 @@ body {
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;  /* Ensures padding doesn't cause overflow */
 }
 
 .login-page h2 {
@@ -31,6 +32,7 @@ body {
   align-items: center;
   height: 100vh;
   background-color: transparent; /* Keep the background transparent for gradient */
+  padding: 10px;  /* Ensure there's space around the container */
 }
 
 .login-form {
@@ -40,6 +42,7 @@ body {
   padding: 40px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;  /* Prevents overflow */
 }
 
 .login-form h2 {
@@ -65,13 +68,14 @@ label {
 /* Input Fields */
 input {
   width: 100%;
-  padding: 10px;
+  padding: 10px 40px; /* Ensuring there's space for icons */
   font-size: 1rem;
   border-radius: 5px;
   border: 1px solid #ddd;
   background-color: #fafafa;
   padding-left: 40px; /* Adding space for icons */
   transition: border-color 0.3s ease;
+  box-sizing: border-box;  /* Prevents overflow */
 }
 
 input:focus {
@@ -137,6 +141,11 @@ button:active {
   .login-form h2 {
     font-size: 1.75rem;
   }
+
+  /* Reducing padding for small screens */
+  .login-page {
+    padding: 10px;
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -146,5 +155,16 @@ button:active {
 
   .login-form h2 {
     font-size: 1.5rem;
+  }
+
+  /* Adjusting input padding for mobile */
+  input {
+    padding: 10px 20px;
+  }
+
+  /* Adjust button size for mobile */
+  button {
+    padding: 12px;
+    font-size: 1rem;
   }
 }
