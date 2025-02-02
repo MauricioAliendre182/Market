@@ -60,7 +60,7 @@ describe('UsersService', () => {
     expect(req.request.body).toEqual(mockAdminUser);
   }));
 
-  it('should send a POST request to create a customer', waitForAsync (() => {
+  it('should send a POST request to create a customer', waitForAsync(() => {
     // Check the observable produced
     // mockReponseCustomerUser is what BE is supposed to return
     service.createCustomer(mockCustomerUser).subscribe((response) => {

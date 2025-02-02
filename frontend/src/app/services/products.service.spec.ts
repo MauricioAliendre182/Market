@@ -10,13 +10,17 @@ import { environment } from './../../environments/environment';
 import {
   mockCreateProductRequest,
   mockProductResponse,
-  mockUpdateProductRequest
+  mockUpdateProductRequest,
 } from './../../mocks/product.mock';
 import { Product } from '../models/product.model';
+import { TokenService } from './token.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from '../interceptors/token.interceptor';
 
 describe('ProductsService', () => {
   let service: ProductsService;
   let httpMock: HttpTestingController;
+  let tokenService: TokenService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -26,11 +30,18 @@ describe('ProductsService', () => {
       // useValue: Supplies the value to use instead of the original (mockEnvironment).
       providers: [
         ProductsService,
+        TokenService,
         { provide: environment, useValue: mockEnvironment },
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: TokenInterceptor,
+          multi: true,
+        },
       ],
     });
     service = TestBed.inject(ProductsService);
     httpMock = TestBed.inject(HttpTestingController);
+    tokenService = TestBed.inject(TokenService);
   });
 
   afterEach(() => {
@@ -47,30 +58,30 @@ describe('ProductsService', () => {
     const mockProductData: Product[] = [
       {
         ...mockProductResponse,
-        name: "Product 1",
-        categoryId: 1
+        name: 'Product 1',
+        categoryId: 1,
       },
       {
         ...mockProductResponse,
-        name: "Product 2",
-        categoryId: 1
+        name: 'Product 2',
+        categoryId: 1,
       },
       {
         ...mockProductResponse,
-        name: "Product 3",
-        categoryId: 2
+        name: 'Product 3',
+        categoryId: 2,
       },
     ];
 
     // Act
-    service.getProductByCategory("1").subscribe((response) => {
+    service.getProductByCategory('1').subscribe((response) => {
       // Assert
       expect(response.length).toEqual(2);
-      expect(response[0].name).toEqual("Product 1");
+      expect(response[0].name).toEqual('Product 1');
       expect(response[0].categoryId).toEqual(1);
-      expect(response[1].name).toEqual("Product 2");
+      expect(response[1].name).toEqual('Product 2');
       expect(response[1].categoryId).toEqual(1);
-    })
+    });
 
     // http config
     const req = httpMock.expectOne(
@@ -78,7 +89,7 @@ describe('ProductsService', () => {
     );
 
     // with req.flush we return the data that we want
-    mockProductData.pop()
+    mockProductData.pop();
     req.flush(mockProductData); // Mock the response
 
     expect(req.request.method).toBe('GET');
@@ -90,30 +101,30 @@ describe('ProductsService', () => {
     const mockProductData: Product[] = [
       {
         ...mockProductResponse,
-        name: "Product 1",
-        categoryId: 1
+        name: 'Product 1',
+        categoryId: 1,
       },
       {
         ...mockProductResponse,
-        name: "Product 2",
-        categoryId: 1
+        name: 'Product 2',
+        categoryId: 1,
       },
       {
         ...mockProductResponse,
-        name: "Product 3",
-        categoryId: 2
+        name: 'Product 3',
+        categoryId: 2,
       },
     ];
 
     // Act
-    service.getProductByCategory("1", 1, 0).subscribe((response) => {
+    service.getProductByCategory('1', 1, 0).subscribe((response) => {
       // Assert
       expect(response.length).toEqual(1);
-      expect(response[0].name).toEqual("Product 1");
+      expect(response[0].name).toEqual('Product 1');
       expect(response[0].categoryId).toEqual(1);
       expect(response[1]).toBeUndefined();
       expect(response[1]).toBeUndefined();
-    })
+    });
 
     // http config
     const req = httpMock.expectOne(
@@ -132,12 +143,12 @@ describe('ProductsService', () => {
 
   it('should NOT get a product list when the category ID is incorrect', waitForAsync(() => {
     // Act
-    service.getProductByCategory("3").subscribe({
+    service.getProductByCategory('3').subscribe({
       error: (error) => {
         // Assert
-        expect(error).toBe("Products not found")
-      }
-    })
+        expect(error).toBe('Products not found');
+      },
+    });
 
     // http config
     const req = httpMock.expectOne(
@@ -156,11 +167,11 @@ describe('ProductsService', () => {
     const mockProductData: Product[] = [
       {
         ...mockProductResponse,
-        name: "Product 1",
+        name: 'Product 1',
       },
       {
         ...mockProductResponse,
-        name: "Product 2",
+        name: 'Product 2',
       },
     ];
 
@@ -168,9 +179,9 @@ describe('ProductsService', () => {
     service.getAllProducts(1, 0).subscribe((response) => {
       // Assert
       expect(response.length).toEqual(1);
-      expect(response[0].name).toEqual("Product 1");
+      expect(response[0].name).toEqual('Product 1');
       expect(response[1]).toBeUndefined();
-    })
+    });
 
     // http config
     const req = httpMock.expectOne(
@@ -206,7 +217,7 @@ describe('ProductsService', () => {
       expect(response.length).toEqual(mockProductData.length);
       expect(response[0].taxes).toEqual(19);
       expect(response[1].taxes).toEqual(38);
-    })
+    });
 
     // http config
     const req = httpMock.expectOne(
@@ -241,7 +252,7 @@ describe('ProductsService', () => {
       expect(response.length).toEqual(mockProductData.length);
       expect(response[0].taxes).toEqual(0);
       expect(response[1].taxes).toEqual(0);
-    })
+    });
 
     // http config
     const req = httpMock.expectOne(
@@ -309,19 +320,19 @@ describe('ProductsService', () => {
     expect(req.request.method).toBe('DELETE');
   }));
 
-  it('should successfully fetch products by page with limit and offset', () => {
+  it('should successfully fetch products by page with limit and offset', waitForAsync(() => {
     const mockProductData: Product[] = [
       {
         ...mockProductResponse,
-        name: "Product 1",
+        name: 'Product 1',
       },
       {
         ...mockProductResponse,
-        name: "Product 2",
+        name: 'Product 2',
       },
       {
         ...mockProductResponse,
-        name: "Product 3",
+        name: 'Product 3',
       },
     ];
     const limit = 2;
@@ -329,8 +340,8 @@ describe('ProductsService', () => {
 
     service.getProductByPage(limit, offset).subscribe((products) => {
       expect(products.length).toEqual(2);
-      expect(products[0].name).toEqual("Product 1");
-      expect(products[1].name).toEqual("Product 2");
+      expect(products[0].name).toEqual('Product 1');
+      expect(products[1].name).toEqual('Product 2');
     });
 
     // Mock GET request with query params
@@ -340,9 +351,9 @@ describe('ProductsService', () => {
     );
     expect(req.request.method).toBe('GET');
     req.flush(mockProductData);
-  });
+  }));
 
-  it('should return an empty array when no products are found in the page', () => {
+  it('should return an empty array when no products are found in the page', waitForAsync(() => {
     const limit = 2;
     const offset = 0;
 
@@ -356,9 +367,9 @@ describe('ProductsService', () => {
     );
     expect(req.request.method).toBe('GET');
     req.flush([]);
-  });
+  }));
 
-  it('should return an error if the request to request a product by page fails', () => {
+  it('should return an error if the request to request a product by page fails', waitForAsync(() => {
     const limit = 2;
     const offset = 0;
 
@@ -367,8 +378,8 @@ describe('ProductsService', () => {
         // This should not be called
       },
       error: (error) => {
-        expect(error).toBe('Ups..something was wrong');
-      }
+        expect(error.error).toBe('Ups..something was wrong');
+      },
     });
 
     // Mock GET request with error response
@@ -376,134 +387,217 @@ describe('ProductsService', () => {
       `${mockEnvironment.API_URL}/market/api/products?limit=2&offset=0`
     );
     expect(req.request.method).toBe('GET');
-    req.flush('Something went wrong', { status: 500, statusText: 'Internal Server Error' });
-  });
+    req.flush('Ups..something was wrong', {
+      status: 500,
+      statusText: 'Internal Server Error',
+    });
+  }));
 
-  it('should successfully get a product', () => {
+  it('should successfully get a product', waitForAsync(() => {
     service.getProduct(1).subscribe((product) => {
       expect(product).toEqual(mockProductResponse);
     });
 
     // Mock GET request
-    const req = httpMock.expectOne(`${mockEnvironment.API_URL}/market/api/products/1`);
+    const req = httpMock.expectOne(
+      `${mockEnvironment.API_URL}/market/api/products/1`
+    );
     expect(req.request.method).toBe('GET');
     req.flush(mockProductResponse);
-  });
+  }));
 
-  it('should return error if product not found (404)', () => {
+  it('should return error if product not found (404)', waitForAsync(() => {
     service.getProduct(1).subscribe({
       error: (error) => {
         expect(error).toBe('The product does not exist');
-      }
+      },
     });
 
     // Mock GET request with 404 error
-    const req = httpMock.expectOne(`${mockEnvironment.API_URL}/market/api/products/1`);
+    const req = httpMock.expectOne(
+      `${mockEnvironment.API_URL}/market/api/products/1`
+    );
     req.flush('Product Not Found', { status: 404, statusText: 'Not Found' });
-  });
+  }));
 
-  it('should return error if server fails (500)', () => {
+  it('should return error if server fails (500)', waitForAsync(() => {
     service.getProduct(1).subscribe({
       error: (error) => {
         expect(error).toBe('Server is failing');
-      }
+      },
     });
 
     // Mock GET request with 500 error
-    const req = httpMock.expectOne(`${mockEnvironment.API_URL}/market/api/products/1`);
-    req.flush('Server Error', { status: 500, statusText: 'Internal Server Error' });
-  });
+    const req = httpMock.expectOne(
+      `${mockEnvironment.API_URL}/market/api/products/1`
+    );
+    req.flush('Server Error', {
+      status: 500,
+      statusText: 'Internal Server Error',
+    });
+  }));
 
-  it('should return error if access is forbidden (403)', () => {
+  it('should return error if access is forbidden (403)', waitForAsync(() => {
     service.getProduct(1).subscribe({
       error: (error) => {
         expect(error).toBe('The access is forbidden');
-      }
+      },
     });
 
     // Mock GET request with 403 error
-    const req = httpMock.expectOne(`${mockEnvironment.API_URL}/market/api/products/1`);
+    const req = httpMock.expectOne(
+      `${mockEnvironment.API_URL}/market/api/products/1`
+    );
     req.flush('Forbidden', { status: 403, statusText: 'Forbidden' });
-  });
+  }));
 
-  it('should return generic error for other errors', () => {
+  it('should return generic error for other errors', waitForAsync(() => {
     service.getProduct(1).subscribe({
       error: (error) => {
-        expect(error).toBe('Ups..something was wrong');
-      }
-    });
-
-    // Mock GET request with a different error
-    const req = httpMock.expectOne(`${mockEnvironment.API_URL}/market/api/products/1`);
-    req.flush('Something went wrong', { status: 400, statusText: 'Bad Request' });
-  });
-
-  it('should fetch product and update it simultaneously', () => {
-    service.fetchReadAndUpdate(1, mockUpdateProductRequest).subscribe(([product, updatedProduct]) => {
-      expect(product).toEqual(mockProductResponse);
-      expect(updatedProduct).toEqual(mockProductResponse);
-    });
-
-    // Mock the GET request
-    const req1 = httpMock.expectOne(`${mockEnvironment.API_URL}/market/api/products/1`);
-    expect(req1.request.method).toBe('GET');
-    req1.flush(mockProductResponse);
-
-    // Mock the PUT request
-    const req2 = httpMock.expectOne(`${mockEnvironment.API_URL}/market/api/products/update/1`);
-    expect(req2.request.method).toBe('PUT');
-    req2.flush(mockProductResponse);
-  });
-
-  it('should fetch product first and update it afterward', () => {
-    service.fetchFirstReadAndLastlyUpdate(1, mockUpdateProductRequest).subscribe((updatedProduct) => {
-      expect(updatedProduct).toEqual(mockProductResponse);
-    });
-
-    // Mock the GET request
-    const req1 = httpMock.expectOne(`${mockEnvironment.API_URL}/market/api/products/1`);
-    expect(req1.request.method).toBe('GET');
-    req1.flush(mockProductResponse);
-
-    // Mock the PUT request
-    const req2 = httpMock.expectOne(`${mockEnvironment.API_URL}/market/api/products/update/${mockProductResponse.productId}`);
-    expect(req2.request.method).toBe('PUT');
-    req2.flush(mockProductResponse);
-  });
-
-  it('should return error if product is not found before updating (404)', () => {
-    service.fetchFirstReadAndLastlyUpdate(999, mockUpdateProductRequest).subscribe({
-      next: () => fail('Expected an error, but got a response'),
-      error: (error) => {
-        // Simulate 404 error
-        expect(error).toBeUndefined();
-      }
-    });
-
-    // Mock GET request with a 404 error
-    const req = httpMock.expectOne(`${mockEnvironment.API_URL}/market/api/products/999`);
-    expect(req.request.method).toBe('GET');
-    req.flush('Not Found', { status: 404, statusText: 'Not Found' });
-  });
-
-  it('should return error if update fails (500)', () => {
-    service.fetchReadAndUpdate(1, mockUpdateProductRequest).subscribe({
-      next: () => fail('Expected an error, but got a response'),
-      error: (error) => {
-        expect(error).toBeTruthy();
         expect(error).toBe('Ups..something was wrong');
       },
     });
 
+    // Mock GET request with a different error
+    const req = httpMock.expectOne(
+      `${mockEnvironment.API_URL}/market/api/products/1`
+    );
+    req.flush('Something went wrong', {
+      status: 400,
+      statusText: 'Bad Request',
+    });
+  }));
+
+  it('should fetch product and update it simultaneously', waitForAsync(() => {
+    service
+      .fetchReadAndUpdate(1, mockUpdateProductRequest)
+      .subscribe(([product, updatedProduct]) => {
+        expect(product).toEqual(mockProductResponse);
+        expect(updatedProduct).toEqual(mockProductResponse);
+      });
+
     // Mock the GET request
-    const req1 = httpMock.expectOne(`${mockEnvironment.API_URL}/market/api/products/1`);
+    const req1 = httpMock.expectOne(
+      `${mockEnvironment.API_URL}/market/api/products/1`
+    );
     expect(req1.request.method).toBe('GET');
     req1.flush(mockProductResponse);
 
     // Mock the PUT request
-    const req2 = httpMock.expectOne(`${mockEnvironment.API_URL}/market/api/products/update/1`);
+    const req2 = httpMock.expectOne(
+      `${mockEnvironment.API_URL}/market/api/products/update/1`
+    );
     expect(req2.request.method).toBe('PUT');
-    req2.flush('Server error', { status: 500, statusText: 'Internal Server Error' });
-  });
+    req2.flush(mockProductResponse);
+  }));
+
+  it('should fetch product first and update it afterward', waitForAsync(() => {
+    service
+      .fetchFirstReadAndLastlyUpdate(1, mockUpdateProductRequest)
+      .subscribe((updatedProduct) => {
+        expect(updatedProduct).toEqual(mockProductResponse);
+      });
+
+    // Mock the GET request
+    const req1 = httpMock.expectOne(
+      `${mockEnvironment.API_URL}/market/api/products/1`
+    );
+    expect(req1.request.method).toBe('GET');
+    req1.flush(mockProductResponse);
+
+    // Mock the PUT request
+    const req2 = httpMock.expectOne(
+      `${mockEnvironment.API_URL}/market/api/products/update/${mockProductResponse.productId}`
+    );
+    expect(req2.request.method).toBe('PUT');
+    req2.flush(mockProductResponse);
+  }));
+
+  it('should return error if product is not found before updating (404)', waitForAsync(() => {
+    service
+      .fetchFirstReadAndLastlyUpdate(999, mockUpdateProductRequest)
+      .subscribe({
+        next: () => fail('Expected an error, but got a response'),
+        error: (error) => {
+          // Simulate 404 error
+          expect(error).toEqual("The product does not exist");
+        },
+      });
+
+    // Mock GET request with a 404 error
+    const req = httpMock.expectOne(
+      `${mockEnvironment.API_URL}/market/api/products/999`
+    );
+    expect(req.request.method).toBe('GET');
+    req.flush('Not Found', { status: 404, statusText: 'Not Found' });
+  }));
+
+  it('should return error if update fails (500)', waitForAsync(() => {
+    service.fetchReadAndUpdate(1, mockUpdateProductRequest).subscribe({
+      next: () => fail('Expected an error, but got a response'),
+      error: (error) => {
+        expect(error).toBeTruthy();
+        expect(error.error).toEqual('Ups..something was wrong');
+      },
+    });
+
+    // Mock the GET request
+    const req1 = httpMock.expectOne(
+      `${mockEnvironment.API_URL}/market/api/products/1`
+    );
+    expect(req1.request.method).toBe('GET');
+    req1.flush(mockProductResponse);
+
+    // Mock the PUT request
+    const req2 = httpMock.expectOne(
+      `${mockEnvironment.API_URL}/market/api/products/update/1`
+    );
+    expect(req2.request.method).toBe('PUT');
+    // In the flush process, an error should be sent with the message error
+    // and the mock error, in this case the message error is Client Not Found and the mock error
+    // is an object with the statun and the status text
+    req2.flush('Ups..something was wrong', {
+      status: 500,
+      statusText: 'Internal Server Error',
+    });
+  }));
+
+  it('should get product list intercepting the token', waitForAsync(() => {
+    // Test to review the token interceptor
+    // Arrange
+    const mockProductData: Product[] = [
+      {
+        ...mockProductResponse,
+        name: 'Product 1',
+      },
+      {
+        ...mockProductResponse,
+        name: 'Product 2',
+      },
+    ];
+
+    // Spy on the real TokenService to return a fake token
+    jest.spyOn(tokenService, 'getToken').mockReturnValue('123')
+
+    // Act
+    service.getAllProducts(2, 0).subscribe((response) => {
+      // Assert
+      expect(response.length).toEqual(2);
+      expect(response[0].name).toEqual('Product 1');
+      expect(response[1].name).toEqual('Product 2');
+    });
+
+    // http config
+    const req = httpMock.expectOne(
+      `${mockEnvironment.API_URL}/market/api/products?limit=2&offset=0`
+    );
+    const headers = req.request.headers;
+
+    // with req.flush we return the data that we want
+    req.flush(mockProductData); // Mock the response
+
+    expect(req.request.method).toBe('GET');
+    expect(headers.get("Authorization")).toEqual('Bearer 123')
+  }));
 
 });
