@@ -520,7 +520,7 @@ describe('ProductsService', () => {
         next: () => fail('Expected an error, but got a response'),
         error: (error) => {
           // Simulate 404 error
-          expect(error).toEqual("The product does not exist");
+          expect(error).toEqual('The product does not exist');
         },
       });
 
@@ -577,7 +577,7 @@ describe('ProductsService', () => {
     ];
 
     // Spy on the real TokenService to return a fake token
-    jest.spyOn(tokenService, 'getToken').mockReturnValue('123')
+    jest.spyOn(tokenService, 'getToken').mockReturnValue('123');
 
     // Act
     service.getAllProducts(2, 0).subscribe((response) => {
@@ -597,7 +597,6 @@ describe('ProductsService', () => {
     req.flush(mockProductData); // Mock the response
 
     expect(req.request.method).toBe('GET');
-    expect(headers.get("Authorization")).toEqual('Bearer 123')
+    expect(headers.get('Authorization')).toEqual('Bearer 123');
   }));
-
 });

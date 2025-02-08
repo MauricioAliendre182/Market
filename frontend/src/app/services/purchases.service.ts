@@ -16,7 +16,7 @@ export class PurchasesService {
     return this.httpClient.post<Purchase>(`${this.url}/save`, dto);
   }
 
-  getAllProducts(limit?: number, offset?: number) {
+  getAllPurchases(limit?: number, offset?: number) {
     let params = new HttpParams();
     if (limit !== undefined && offset !== undefined) {
       params = params.set('limit', limit);
@@ -54,7 +54,7 @@ export class PurchasesService {
             return throwError(() => 'Server is failing');
           }
           if (error.status === 404) {
-            return throwError(() => 'The purchases associated to this user do not exist');
+            return throwError(() => 'The purchase associated to this user do not exist');
           }
           if (error.status === 403) {
             return throwError(() => 'The access for this user is forbidden');

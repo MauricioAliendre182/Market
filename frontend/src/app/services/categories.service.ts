@@ -18,7 +18,7 @@ export class CategoriesService {
     let params = new HttpParams();
     if (limit && offset) {
       params = params.set('limit', limit);
-      params = params.set('offset', limit)
+      params = params.set('offset', offset)
     }
     return this.http.get<Category[]>(this.url, {params})
   }

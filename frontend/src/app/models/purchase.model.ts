@@ -1,4 +1,4 @@
-interface Items {
+export interface Items {
   productId: number;
   quantity: number;
   total: number;
