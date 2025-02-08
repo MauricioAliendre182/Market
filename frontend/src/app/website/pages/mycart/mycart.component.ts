@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { forkJoin, map } from 'rxjs';
 import { Product } from 'src/app/models/product.model';
 import { CreatePurchaseDTO, Purchase } from 'src/app/models/purchase.model';
-import { ProductsService } from 'src/app/services/products.service';
-import { PurchasesService } from 'src/app/services/purchases.service';
-import { StoreService } from 'src/app/services/store.service';
+import { ProductsService } from '../../../services/products.service';
+import { PurchasesService } from '../../../services/purchases.service';
+import { StoreService } from '../../../services/store.service';
 
 @Component({
   selector: 'app-mycart',

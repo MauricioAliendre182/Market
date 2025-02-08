@@ -1,20 +1,3 @@
-<p>
-  Quantity of products {{myShoppingCart.length}}
-</p>
-<p>
-  Total ${{total}}
-</p>
-<p>
-  Current Date: {{ today | date:'longDate'}}
-</p>
-<p>
-  time ago: {{ date | timeAgo}}
-</p>
-<p>
-  {{ 'wELCOME To THE Page!' | uppercase }}
-</p>
-<button (click)="createNewProduct()">Create</button>
-<button (click)="onShowDetail(12345)">Detail not found</button>
 <div class="products--grid">
   <app-product
   [product]="product"
@@ -35,8 +18,8 @@
     <button (click)="toggleProductDetail()">Close</button>
     <h1>{{ productChosen.name }}</h1>
     <p>{{ productChosen.category.category}}</p>
-    <button (click)="updateAProduct()">Edit</button>
-    <button (click)="deleteAProduct()">Delete</button>
+    <button *ngIf="isAdminUser()" (click)="updateAProduct()">Edit</button>
+    <button *ngIf="isAdminUser()" (click)="deleteAProduct()">Delete</button>
     <swiper
     [slidesPerView]="1"
    >

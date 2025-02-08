@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 import { catchError, of, switchMap, throwError } from 'rxjs';
 import { Client } from 'src/app/models/client.model';
 import { User } from 'src/app/models/user.model';
-import { AuthService } from 'src/app/services/auth.service';
-import { ClientService } from 'src/app/services/client.service';
-import { StoreService } from 'src/app/services/store.service';
+import { AuthService } from '../../../services/auth.service';
+import { ClientService } from '../../../services/client.service';
+import { StoreService } from '../../../services/store.service';
 
 @Component({
   selector: 'app-login',
@@ -37,7 +37,10 @@ export class LoginComponent {
       this.authService.loginAndGet({ username, password }).pipe(
         switchMap((profile: User) => {
           this.profile = profile;
+          // Store the profile's name
           this.storeService.storeName(profile);
+          // Store the profile's role
+          this.storeService.storeRole(profile);
           return this.clientService.getAClientByEmail(profile.name);
         })
       ).subscribe({

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Product } from 'src/app/models/product.model';
-import { ProductsService } from 'src/app/services/products.service';
+import { ProductsService } from '../../../services/products.service';
 import { switchMap } from 'rxjs';
 import { LoadMorePages } from 'src/app/models/pagination.model';
 

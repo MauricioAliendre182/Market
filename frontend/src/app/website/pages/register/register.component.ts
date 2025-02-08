@@ -5,11 +5,11 @@ import { catchError, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { OnExit } from 'src/app/guards/exit.guard';
 import { Client } from 'src/app/models/client.model';
 import { CreateUserDTO, LoginAuth, LoginUser, User } from 'src/app/models/user.model';
-import { AuthService } from 'src/app/services/auth.service';
-import { ClientService } from 'src/app/services/client.service';
-import { StoreService } from 'src/app/services/store.service';
-import { TokenService } from 'src/app/services/token.service';
-import { UsersService } from 'src/app/services/users.service';
+import { AuthService } from '../../../services/auth.service';
+import { ClientService } from '../../../services/client.service';
+import { StoreService } from '../../../services/store.service';
+import { TokenService } from '../../../services/token.service';
+import { UsersService } from '../../../services/users.service';
 
 @Component({
   selector: 'app-register',

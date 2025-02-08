@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HomeComponent } from './home.component';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ProductsService } from '../../../services/products.service';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -8,7 +12,18 @@ describe('HomeComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [HomeComponent]
+      declarations: [HomeComponent],
+      imports: [HttpClientTestingModule], // ✅ FIX: Add HttpClientTestingModule
+      providers: [
+        ProductsService, // ✅ Ensure the service is provided
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            paramMap: of({ get: (key: string) => 'mockCategoryId' }), // Mock params
+            queryParamMap: of({ get: (key: string) => 'mockProductId' }) // Mock query params
+          }
+        }
+      ]
     });
     fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;

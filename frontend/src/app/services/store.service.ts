@@ -52,6 +52,15 @@ export class StoreService {
     return localStorage.getItem("name")
   }
 
+  // Store the role in the localStorage
+  storeRole(profile: User) {
+    localStorage.setItem("role", profile.roles[0])
+  }
+
+  getRole() {
+    return localStorage.getItem("role")
+  }
+
   addProduct(product: Product) {
     this.myShoppingCart.push(product);
     localStorage.setItem('shoppingCart', JSON.stringify(this.myShoppingCart));

@@ -157,4 +157,8 @@ export class ProductsComponent {
   emitLoadMore() {
     this.onLoadMore.emit({ limit: this.limit });
   }
+
+  isAdminUser() {
+    return this.storeService.getRole() == 'ROLE_ADMIN';
+  }
 }
