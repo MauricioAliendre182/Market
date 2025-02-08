@@ -73,7 +73,7 @@ jobs:
         npm run test
 
     - name: Upload Frontend Test Reports
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: frontend-test-reports
         path: frontend/coverage
