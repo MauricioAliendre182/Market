@@ -79,7 +79,7 @@ export class NavComponent implements OnInit, OnDestroy {
     // We need to clear the profile too at the moment to close session
     this.profile = null;
     // Clear localstorage
-    localStorage.clear()
+    localStorage.clear();
     // Redirect me at /home page
     this.router.navigate(['/home']);
   }
