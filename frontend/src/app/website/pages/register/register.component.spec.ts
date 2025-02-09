@@ -7,6 +7,7 @@ import { TokenService } from '../../../services/token.service';
 import { UsersService } from '../../../services/users.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { StoreService } from '../../../services/store.service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -15,7 +16,7 @@ describe('RegisterComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [RegisterComponent],
-      imports: [HttpClientTestingModule], // ✅ FIX: Add HttpClientTestingModule
+      imports: [HttpClientTestingModule, ReactiveFormsModule], // ✅ FIX: Add HttpClientTestingModule and ReactiveFormsModule
       providers: [
         AuthService,
         ClientService,

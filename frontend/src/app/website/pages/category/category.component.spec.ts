@@ -5,6 +5,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { ProductsService } from '../../../services/products.service';
+import { ProductsComponent } from '../../../shared/components/products/products.component';
+import { FormsModule } from '@angular/forms';
 
 describe('CategoryComponent', () => {
   let component: CategoryComponent;
@@ -12,8 +14,8 @@ describe('CategoryComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [CategoryComponent],
-      imports: [HttpClientTestingModule], // ✅ FIX: Add HttpClientTestingModule
+      declarations: [CategoryComponent, ProductsComponent], // Include the ProductsComponent here
+      imports: [HttpClientTestingModule, FormsModule], // ✅ FIX: Add HttpClientTestingModule and FormsModule
       providers: [
         ProductsService, // ✅ Ensure the service is provided
         {
