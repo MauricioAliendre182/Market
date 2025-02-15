@@ -102,32 +102,19 @@ export class ProductsComponent {
     })
 
   }
-  createNewProduct() {
-    const product: CreateProductDTO = {
-      "name": "Tomatoe",
-      "categoryId": 1,
-      "price": 3.0,
-      "stock": 10,
-      "imgUrl": '',
-      "active": true
-  }
+
+  // TODO Create a button that deploy a menu to create a new product
+  createNewProduct(product: CreateProductDTO) {
     this.productService.createProduct(product)
     .subscribe(
       data => {
-        console.log('Created',data)
+        console.log('Created', data)
         this.products.unshift(data)
       }
     )
   }
 
-  updateAProduct() {
-    const product: UpdateProductDTO = {
-      "name": "Tomatoe",
-      "categoryId": 1,
-      "price": 3.0,
-      "stock": 10,
-      "active": true
-    }
+  updateAProduct(product: UpdateProductDTO) {
     const id = this.productChosen.productId;
     this.productService.updateProduct(product, id)
     .subscribe((data) => {

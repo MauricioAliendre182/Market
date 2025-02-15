@@ -18,7 +18,8 @@
     <button (click)="toggleProductDetail()">Close</button>
     <h1>{{ productChosen.name }}</h1>
     <p>{{ productChosen.category.category}}</p>
-    <button *ngIf="isAdminUser()" (click)="updateAProduct()">Edit</button>
+    <!-- TODO Create an slider with options to modify the product -->
+    <button *ngIf="isAdminUser()" (click)="updateAProduct(productChosen)">Edit</button>
     <button *ngIf="isAdminUser()" (click)="deleteAProduct()">Delete</button>
     <swiper
     [slidesPerView]="1"
