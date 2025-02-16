@@ -16,7 +16,6 @@ services:
       POSTGRES_PASSWORD: R2D2-333
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ./db-init:/docker-entrypoint-initdb.d  # Mount the SQL init directory
   spring-boot-app:
     build:
       context: ./backend

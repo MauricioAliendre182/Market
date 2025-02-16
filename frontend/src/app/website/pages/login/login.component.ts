@@ -41,7 +41,7 @@ export class LoginComponent {
           this.storeService.storeName(profile);
           // Store the profile's role
           this.storeService.storeRole(profile);
-          return this.clientService.getAClientByEmail(profile.name);
+          return this.clientService.getAClientByEmail(profile.username);
         })
       ).subscribe({
         next: (client: Client) => {

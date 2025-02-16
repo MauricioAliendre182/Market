@@ -66,7 +66,7 @@ INSERT INTO clientes VALUES ('2552243', 'Cl 1 # 11 - 11', 3462257293, 'gali@leo.
 INSERT INTO clientes VALUES ('983824', 'Cl 2 # 22 - 22', 3019392466, 'nico@cope.com', 'Nicolás', 'Copernico');
 
 -- USUARIOS
-INSERT INTO usuarios VALUES (1, 'admin', 'admin', 'admin@admin.com');
+INSERT INTO usuarios VALUES (1, 'admin', '$2a$10$68Vcdxfgv33w6R8sPQznUu0oEm3pVmdv5eCuAZ.sdVUBG4fcdqEQW', 'admin@admin.com');
 INSERT INTO domain_user_roles VALUES (1, 'ROLE_ADMIN');
 
 -- COMPRA

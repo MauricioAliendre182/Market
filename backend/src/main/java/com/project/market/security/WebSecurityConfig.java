@@ -59,7 +59,10 @@ public class WebSecurityConfig{
                                 "swagger-ui.html",
                                 "swagger-ui/**",
                                 "v3/api-docs/**",
-                                "user/**")
+                                "/user/signup/**",
+                                "/user/login",
+                                "/category/**",
+                                "/products")
                         .permitAll()
                 )
                 .authorizeHttpRequests(auth -> auth
