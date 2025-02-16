@@ -26,7 +26,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping()
-    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
+    @PreAuthorize("permitAll")
     @Operation(summary = "Get all the categories")
     @ApiResponse(responseCode = "200", description = "OK")
     public ResponseEntity<List<Category>> getAllCategories() {
@@ -34,7 +34,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
+    @PreAuthorize("permitAll")
     @Operation(summary = "Search a category with ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),

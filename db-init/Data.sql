@@ -61,9 +61,13 @@ INSERT INTO productos VALUES (49, '2745 F40 45', 8, 'Frijol', 8200, 270, true);
 INSERT INTO productos VALUES (50, '6351 R33 92', 8, 'Café', 7200, 400, true);
 
 -- CLIENTES
-INSERT INTO clientes VALUES ('4546221', 'Cl 3 # 33 - 33', 3104583224, 'kepler@me.com', 'Johannes', 'Kepler');
+INSERT INTO clientes VALUES ('4546221', 'Cl 3 # 33 - 33', 3104583224, 'admin@admin.com', 'Johannes', 'Kepler');
 INSERT INTO clientes VALUES ('2552243', 'Cl 1 # 11 - 11', 3462257293, 'gali@leo.com', 'Galileo', 'Galilei');
 INSERT INTO clientes VALUES ('983824', 'Cl 2 # 22 - 22', 3019392466, 'nico@cope.com', 'Nicolás', 'Copernico');
+
+-- USUARIOS
+INSERT INTO usuarios VALUES (1, 'admin', 'admin', 'admin@admin.com');
+INSERT INTO domain_user_roles VALUES (1, 'ROLE_ADMIN');
 
 -- COMPRA
 INSERT INTO compras VALUES (1, '', TO_TIMESTAMP('10/08/1992 17:30:00','DD/MM/YYYY HH24:MI:SS'), '4546221', 'E', 'P');

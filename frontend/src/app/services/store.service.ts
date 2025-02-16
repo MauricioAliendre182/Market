@@ -45,7 +45,7 @@ export class StoreService {
 
   // Store the username in the localstorage
   storeName(profile: User) {
-    localStorage.setItem("nane", profile.name.toString())
+    localStorage.setItem("name", profile.name.toString())
   }
 
   getName() {
@@ -54,7 +54,7 @@ export class StoreService {
 
   // Store the role in the localStorage
   storeRole(profile: User) {
-    localStorage.setItem("role", profile.roles[0])
+    localStorage.setItem("role", profile.roles[0].toString())
   }
 
   getRole() {

@@ -2,6 +2,7 @@ package com.project.market.web.controller;
 
 import com.project.market.domain.dto.User;
 import com.project.market.domain.service.UserService;
+import com.project.market.persistence.entities.DomainUser;
 import com.project.market.security.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,7 +41,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
-    public ResponseEntity<User> getAUserById(
+    public ResponseEntity<DomainUser> getAUserById(
             @Parameter(description = "The id of the user", required = true, example = "2")
             @PathVariable("id") Integer idUser
     ) {
@@ -56,7 +57,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
-    public ResponseEntity<User> getAUserByUsername(
+    public ResponseEntity<DomainUser> getAUserByUsername(
             @Parameter(description = "The username of the user", required = true, example = "maps182")
             @PathVariable("username") String username
     ) {

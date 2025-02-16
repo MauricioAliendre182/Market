@@ -20,15 +20,17 @@ public class UserRepository implements UserRepositoryDTO {
     private UserMapper mapper;
 
     @Override
-    public Optional<User> getAUserById(int idUser) {
-        return userCrudRepository.findById(idUser)
-                .map(domainUser -> mapper.toUser(domainUser));
+    public Optional<DomainUser> getAUserById(int idUser) {
+        // As we are returning just the domain user, we do not need to make the map operation
+        // .map(domainUser -> mapper.toUser(domainUser));
+        return userCrudRepository.findById(idUser);
     }
 
     @Override
-    public Optional<User> getAUserByUsername(String username) {
-        return userCrudRepository.findOneByUsername(username)
-                .map(domainUser -> mapper.toUser(domainUser));
+    public Optional<DomainUser> getAUserByUsername(String username) {
+        // As we are returning just the domain user, we do not need to make the map operation
+        // .map(domainUser -> mapper.toUser(domainUser));
+        return userCrudRepository.findOneByUsername(username);
     }
 
     @Override
