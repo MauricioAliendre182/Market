@@ -10,12 +10,12 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { RecoveryComponent } from './pages/recovery/recovery.component';
 import { ProfileComponent } from './pages/profile/profile.component';
-import { ProductDetailComponent } from './pages/product-detail/product-detail.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { SharedModule } from '../shared/shared.module';
 import { CategoryModule } from './pages/category/category.module';
 import { QuicklinkModule } from 'ngx-quicklink';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EditProductComponent } from './pages/edit-product/edit-product.component';
 
 
 @NgModule({
@@ -27,7 +27,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     RegisterComponent,
     RecoveryComponent,
     ProfileComponent,
-    ProductDetailComponent,
+    EditProductComponent,
     LayoutComponent
   ],
   imports: [

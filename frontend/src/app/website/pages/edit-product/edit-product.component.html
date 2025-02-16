@@ -1,0 +1,39 @@
+<div class="edit-product">
+  <h1>Edit Product</h1>
+  <form [formGroup]="editProductForm" (ngSubmit)="onSubmit()">
+    <label>
+      Name:
+      <input formControlName="name" type="text" />
+    </label>
+
+    <label>
+      Category:
+      <select formControlName="categoryId">
+        <option *ngFor="let category of categories" [value]="category.categoryId">{{ category.category }}</option>
+      </select>
+    </label>
+
+    <label>
+      Price:
+      <input formControlName="price" type="number" />
+    </label>
+
+    <label>
+      Stock:
+      <input formControlName="stock" type="number" />
+    </label>
+
+    <label>
+      Active:
+      <input formControlName="active" type="checkbox" />
+    </label>
+
+    <label>
+      Image URL:
+      <input formControlName="imgUrl" type="text" />
+    </label>
+
+    <button type="submit" [disabled]="editProductForm.invalid">Save</button>
+    <button type="button" (click)="cancel()">Cancel</button>
+  </form>
+</div>

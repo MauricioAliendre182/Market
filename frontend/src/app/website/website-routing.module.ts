@@ -6,10 +6,11 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { RecoveryComponent } from './pages/recovery/recovery.component';
 import { ProfileComponent } from './pages/profile/profile.component';
-import { ProductDetailComponent } from './pages/product-detail/product-detail.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { authGuard } from '../guards/auth.guard';
 import { exitGuard } from '../guards/exit.guard';
+import { EditProductComponent } from './pages/edit-product/edit-product.component';
+import { adminGuard } from '../guards/admin.guard';
 
 const routes: Routes = [
   // All the 'children' components will inherit what we have in LayoutComponent (in this
@@ -27,8 +28,9 @@ const routes: Routes = [
         pathMatch: 'full',
       },
       {
-        path: 'product/:id',
-        component: ProductDetailComponent,
+        path: 'edit-product/:id',
+        component: EditProductComponent,
+        canActivate: [ adminGuard ]
       },
       // Rules
       {

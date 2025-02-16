@@ -23,7 +23,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping()
-    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
+    @PreAuthorize("permitAll")
     @Operation(summary = "Get all supermarket products")
     @ApiResponse(responseCode = "200", description = "OK")
     public ResponseEntity<List<Product>> getAll(
@@ -89,7 +89,7 @@ public class ProductController {
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasRole('CUSTOMER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update a product")
     @ApiResponse(responseCode = "200", description = "Update")
     public ResponseEntity<Product> update(

@@ -19,7 +19,7 @@
     <h1>{{ productChosen.name }}</h1>
     <p>{{ productChosen.category.category}}</p>
     <!-- TODO Create an slider with options to modify the product -->
-    <button *ngIf="isAdminUser()" (click)="updateAProduct(productChosen)">Edit</button>
+    <a *ngIf="isAdminUser()" [routerLink]="['/edit-product', productChosen.productId]" class="edit-button">Edit</a>
     <button *ngIf="isAdminUser()" (click)="deleteAProduct()">Delete</button>
     <swiper
     [slidesPerView]="1"

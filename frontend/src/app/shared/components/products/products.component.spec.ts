@@ -9,7 +9,8 @@ import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CreateProductDTO } from 'src/app/models/product.model';
-import { mockCreateProductRequest } from '../../../../mocks/product.mock';
+import { mockCreateProductRequest, mockProductResponse } from '../../../../mocks/product.mock';
+import { By } from '@angular/platform-browser';
 
 describe('ProductsComponent', () => {
   let component: ProductsComponent;
@@ -93,6 +94,22 @@ describe('ProductsComponent', () => {
     component.onAddToShoppingCart(product);
 
     expect(storeServiceMock.addProduct).toHaveBeenCalledWith(product);
+  }));
+
+  it('should have a list of app-product components', waitForAsync(() => {
+    // Arrange
+    component.products = [
+      { ...mockProductResponse },
+      { ...mockProductResponse },
+      { ...mockProductResponse }
+    ];
+
+    // Act
+    fixture.detectChanges();
+    const debugElement = fixture.debugElement.queryAll(By.css('app-product'));
+
+    // Assert
+    expect(debugElement.length).toEqual(3);
   }));
 
   it('should call deleteProduct when deleting a product', waitForAsync(() => {
