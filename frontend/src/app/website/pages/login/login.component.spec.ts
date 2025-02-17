@@ -70,7 +70,7 @@ describe('LoginComponent', () => {
 
   it('should call loginAndGet and navigate on successful login', waitForAsync(() => {
     component.loginForm.setValue({ username: 'testuser', password: 'password123' });
-    const mockUser: User = { ...mockResponseAdminUser, username: 'testuser', password: 'password123'  }
+    const mockUser: User = { ...mockResponseAdminUser, name: 'testuser', username: 'testuser', password: 'password123'  }
     const mockClientAdmin: Client = mockClient;
 
     authServiceMock.loginAndGet.mockReturnValue(of(mockUser));
