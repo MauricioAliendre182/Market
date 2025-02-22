@@ -1,15 +1,15 @@
 package com.project.market.domain.dto;
 
 public class Category {
-    private int categoryId;
+    private Integer categoryId;
     private String category;
     private boolean active;
 
-    public int getCategoryId() {
+    public Integer getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(int categoryId) {
+    public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
     }
 

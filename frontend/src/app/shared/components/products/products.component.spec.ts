@@ -4,10 +4,10 @@ import { ProductsComponent } from './products.component';
 import { ProductsService } from '../../../services/products.service';
 import { StoreService } from '../../../services/store.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateProductDTO } from 'src/app/models/product.model';
 import { mockCreateProductRequest, mockProductResponse } from '../../../../mocks/product.mock';
 import { By } from '@angular/platform-browser';
@@ -17,6 +17,7 @@ describe('ProductsComponent', () => {
   let fixture: ComponentFixture<ProductsComponent>;
   let productsServiceMock: any;
   let storeServiceMock: any;
+  let routerMock: any;
 
   beforeEach(waitForAsync(() => {
     productsServiceMock = {
@@ -44,12 +45,15 @@ describe('ProductsComponent', () => {
       getRole: jest.fn(() => 'ROLE_CUSTOMER'),
     };
 
+    routerMock = { navigate: jest.fn() };
+
     TestBed.configureTestingModule({
       declarations: [ProductsComponent],
-      imports: [HttpClientTestingModule, FormsModule], // ✅ FIX: Add HttpClientTestingModule, FormsModule and SwiperModule
+      imports: [HttpClientTestingModule, FormsModule, ReactiveFormsModule], // ✅ FIX: Add HttpClientTestingModule, FormsModule and SwiperModule
       providers: [
         { provide: ProductsService, useValue: productsServiceMock }, // ✅ Ensure the service is provided
         { provide: StoreService, useValue: storeServiceMock },
+        { provide: Router, useValue: routerMock },
         {
           provide: ActivatedRoute, // Mocking paramMap as an observable
           useValue: {
@@ -119,13 +123,6 @@ describe('ProductsComponent', () => {
     expect(productsServiceMock.deleteProduct).toHaveBeenCalledWith(1);
   }));
 
-  it('should call createProduct when creating a product', waitForAsync(() => {
-    const newProduct: CreateProductDTO = mockCreateProductRequest
-    component.createNewProduct(newProduct);
-
-    expect(productsServiceMock.createProduct).toHaveBeenCalledWith(newProduct);
-  }));
-
   it('should call updateProduct when updating a product', waitForAsync(() => {
     component.productChosen = { productId: 1, name: 'Tomatoe' } as any;
     component.updateAProduct({ name: "Updated Name" });
@@ -137,4 +134,83 @@ describe('ProductsComponent', () => {
     storeServiceMock.getRole.mockReturnValue('ROLE_ADMIN');
     expect(component.isAdminUser()).toBeTruthy();
   }));
+
+  it('should toggle create product form visibility', () => {
+    expect(component.showCreateProduct).toBeFalsy();
+    component.toggleCreateProduct();
+    expect(component.showCreateProduct).toBeTruthy();
+    component.toggleCreateProduct();
+    expect(component.showCreateProduct).toBeFalsy();
+  });
+
+  it('should submit a valid product form and create a product', waitForAsync(() => {
+    // Arrange
+    component.productForm.setValue({
+      name: 'New Product',
+      categoryId: 1,
+      price: 50,
+      stock: 20,
+      active: true,
+      imgUrl: 'test.jpg',
+      taxes: 5
+    });
+
+    // Act
+    component.onCreateProduct();
+    fixture.detectChanges();
+
+    // Assert
+    expect(productsServiceMock.createProduct).toHaveBeenCalledWith({
+      name: 'New Product',
+      categoryId: 1,
+      price: 50,
+      stock: 20,
+      active: true,
+      imgUrl: 'test.jpg',
+      taxes: 5
+    });
+
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/home']);
+  }));
+
+  it('should not submit product form if invalid', () => {
+    component.productForm.setValue({
+      name: '', // Missing required field
+      categoryId: null,
+      price: -1, // Invalid price
+      stock: -10, // Invalid stock
+      active: false,
+      imgUrl: '',
+      taxes: 0
+    });
+
+    jest.spyOn(productsServiceMock, 'createProduct');
+
+    component.onCreateProduct();
+
+    expect(productsServiceMock.createProduct).not.toHaveBeenCalled();
+  });
+
+  it('should emit load more event when clicking Load More button', () => {
+    jest.spyOn(component.onLoadMore, 'emit');
+
+    component.limit = 10;
+    component.emitLoadMore();
+
+    expect(component.onLoadMore.emit).toHaveBeenCalledWith({ limit: 10 });
+  });
+
+  it('should display product details when onShowDetail is called', waitForAsync(() => {
+    component.onShowDetail(1);
+    fixture.detectChanges();
+
+    expect(component.showProductDetail).toBeTruthy();
+    expect(productsServiceMock.getProduct).toHaveBeenCalledWith(1);
+  }));
+
+  it('should close product detail when toggleProductDetail is called', () => {
+    component.showProductDetail = true;
+    component.toggleProductDetail();
+    expect(component.showProductDetail).toBeFalsy();
+  });
 });

@@ -1,20 +1,20 @@
 package com.project.market.domain.dto;
 
 public class Product {
-    private int productId;
+    private Integer productId;
     private String name;
-    private int categoryId;
+    private Integer categoryId;
     private double price;
-    private int stock;
+    private Integer stock;
     private boolean active;
     private String imgUrl;
     private Category category;
 
-    public int getProductId() {
+    public Integer getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(Integer productId) {
         this.productId = productId;
     }
 
@@ -26,11 +26,11 @@ public class Product {
         this.name = name;
     }
 
-    public int getCategoryId() {
+    public Integer getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(int categoryId) {
+    public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -42,11 +42,11 @@ public class Product {
         this.price = price;
     }
 
-    public int getStock() {
+    public Integer getStock() {
         return stock;
     }
 
-    public void setStock(int stock) {
+    public void setStock(Integer stock) {
         this.stock = stock;
     }
 

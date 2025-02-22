@@ -6,7 +6,7 @@ import { Product } from 'src/app/models/product.model';
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss']
 })
-export class ProductComponent{
+export class ProductComponent {
   @Input() product: Product = {
     productId: 0,
     name: '',

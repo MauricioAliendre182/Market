@@ -1,14 +1,18 @@
 import { Component, EventEmitter, Input, Output} from '@angular/core';
 import { CreateProductDTO, Product, UpdateProductDTO } from 'src/app/models/product.model';
-import {StoreService} from '../../../services/store.service'
-import {ProductsService} from '../../../services/products.service'
+import { StoreService } from '../../../services/store.service'
+import { ProductsService } from '../../../services/products.service'
 import { LoadMorePages, Pagination } from 'src/app/models/pagination.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss']
 })
+
+// TODO: Clean this file, improve where I can
 export class ProductsComponent {
 
   myShoppingCart: Product[] = [];
@@ -17,6 +21,7 @@ export class ProductsComponent {
   @Input() products: Product[] = [];
   // @Input() productId: string | null = null;
   // Read the changes in productId in a Dynamic way
+  // TODO: Search a way to detect changes when the same productId is selected
   @Input() set productId(id: string | null) {
     if (id) {
       this.onShowDetail(+id)
@@ -25,8 +30,9 @@ export class ProductsComponent {
   @Output() onLoadMore: EventEmitter<LoadMorePages> = new EventEmitter<LoadMorePages>();
 
   today = new Date();
-  date = new Date(2023, 1, 21)
-  showProductDetail = false
+  date = new Date(2023, 1, 21);
+  showProductDetail = false;
+  showCreateProduct = false;
   productChosen: Product = {
     productId: 0,
     name: '',
@@ -41,13 +47,27 @@ export class ProductsComponent {
       active: false
     }
   };
+  productForm: FormGroup;
   statusDetail: 'loading' | "success" | "error" | "init" = "init"
 
   constructor(
     private storeService: StoreService,
-    private productService: ProductsService
+    private productService: ProductsService,
+    private fb: FormBuilder,
+    private router: Router
   ) {
     this.myShoppingCart = this.storeService.getShoppingCart();
+    this.productForm = this.fb.group({
+      name: ['', [Validators.required]],
+      // TODO: Grab the category instead of categoryId
+      categoryId: [0, [Validators.required, Validators.min(0)]],
+      price: [0, [Validators.required, Validators.min(0)]],
+      stock: [0, [Validators.required, Validators.min(0)]],
+      active: [false],
+      // TODO: Check the URL configuration, the API do not accept everything
+      imgUrl: ['', [Validators.required]],
+      taxes: [0]
+    });
   }
 
   onAddToShoppingCart(product: Product) {
@@ -57,6 +77,12 @@ export class ProductsComponent {
 
   toggleProductDetail() {
     this.showProductDetail = !this.showProductDetail;
+    this.showCreateProduct = false
+  }
+
+  toggleCreateProduct() {
+    this.showCreateProduct = !this.showCreateProduct;
+    this.showProductDetail = false;
   }
 
   onShowDetail(id: number) {
@@ -73,6 +99,29 @@ export class ProductsComponent {
       window.alert(error)
       this.statusDetail = 'error'
     })
+  }
+
+  onCreateProduct() {
+    if (this.productForm.valid) {
+      this.productService.createProduct(this.productForm.value)
+      .subscribe(
+        data => {
+          console.log('Created', data);
+          this.products.unshift(data);
+          this.toggleCreateProduct();
+          this.productForm.reset({
+            name: '',
+            categoryId: 0,
+            price: 0,
+            stock: 0,
+            active: false,
+            imgUrl: '',
+            taxes: 0
+          });
+          this.router.navigate(['/home'])
+        }
+      );
+    }
   }
 
   readAndUpdate(id: number) {
@@ -103,17 +152,6 @@ export class ProductsComponent {
 
   }
 
-  // TODO Create a button that deploy a menu to create a new product
-  createNewProduct(product: CreateProductDTO) {
-    this.productService.createProduct(product)
-    .subscribe(
-      data => {
-        console.log('Created', data)
-        this.products.unshift(data)
-      }
-    )
-  }
-
   updateAProduct(product: UpdateProductDTO) {
     const id = this.productChosen.productId;
     this.productService.updateProduct(product, id)
@@ -135,8 +173,10 @@ export class ProductsComponent {
     const id = this.productChosen.productId;
     this.productService.deleteProduct(id)
     .subscribe(() => {
-      const productIndex = this.products.findIndex(item => item.productId === this.productChosen.productId)
-      this.products.splice(productIndex, 1);
+      const productIndex = this.products.findIndex(item => item.productId === id);
+      if (productIndex !== -1) {
+        this.products.splice(productIndex, 1);
+      }
       this.showProductDetail = false;
     })
   }
