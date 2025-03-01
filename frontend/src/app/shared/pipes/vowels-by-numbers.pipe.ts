@@ -7,11 +7,11 @@ export class VowelsByNumbersPipe implements PipeTransform {
 
   transform(value: string): string {
     return value
-    .replace(/(a)/g, "1")
-    .replace(/(e)/g, "2")
-    .replace(/(i)/g, "3")
-    .replace(/(o)/g, "4")
-    .replace(/(u)/g, "5");
+    .replace(/(a)/gi, "1")
+    .replace(/(e)/gi, "2")
+    .replace(/(i)/gi, "3")
+    .replace(/(o)/gi, "4")
+    .replace(/(u)/gi, "5");
   }
 
 }

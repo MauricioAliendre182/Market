@@ -89,15 +89,17 @@ export class ProductsComponent {
     this.statusDetail = 'loading';
     this.toggleProductDetail();
     this.productService.getProduct(id)
-    .subscribe(
-      data => {
-      console.log('product', data)
-      this.productChosen = data
-      this.statusDetail = 'success';
-    }, error => {
-      console.error(error);
-      window.alert(error)
-      this.statusDetail = 'error'
+    .subscribe({
+      next: (data) => {
+        console.log('product', data)
+        this.productChosen = data
+        this.statusDetail = 'success';
+      },
+      error: (error) => {
+        console.error(error);
+        window.alert(error)
+        this.statusDetail = 'error'
+      }
     })
   }
 
@@ -139,7 +141,7 @@ export class ProductsComponent {
     // Make two HTTP requests at the same time
     // It is recommended to have this in the service (As below)
     this.productService.fetchReadAndUpdate(id, {
-      "name": "Tomatoe",
+      "name": "Tomatoe2",
       "categoryId": 1,
       "price": 3.0,
       "stock": 10,
