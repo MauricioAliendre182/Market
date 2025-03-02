@@ -8,6 +8,8 @@ This project is a full-stack e-commerce application built with Angular on the fr
 - **Backend**: Spring Boot REST API
 - **Authentication**: JWT-based authentication
 - **Database**: PostgreSQL
+- **CI tool**: Github Actions
+- **Containerization Software**: Docker
 
 ## Features
 
