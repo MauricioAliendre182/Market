@@ -21,11 +21,11 @@ export class UsersService {
   }
 
   getAUserById(userId: string) {
-    return this.http.get<User>(`${this.url}/user/${userId}`)
+    return this.http.get<User>(`${this.url}/user/id/${userId}`)
   }
 
   getAUserByUsername(username: string) {
-    return this.http.get<User>(`${this.url}/user/${username}`)
+    return this.http.get<User>(`${this.url}/user/username/${username}`)
   }
 
   deleteAUser(userId: string) {

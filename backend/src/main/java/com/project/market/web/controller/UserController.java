@@ -34,7 +34,7 @@ public class UserController {
         this.authenticationManager = authenticationManager;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Search a user with ID")
     @ApiResponses({
@@ -50,7 +50,7 @@ public class UserController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("username/{username}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Search a user using its username")
     @ApiResponses({
