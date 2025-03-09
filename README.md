@@ -8,6 +8,8 @@ This project is a full-stack e-commerce application built with Angular on the fr
 - **Backend**: Spring Boot REST API
 - **Authentication**: JWT-based authentication
 - **Database**: PostgreSQL
+- **CI tool**: Github Actions
+- **Containerization Software**: Docker
 
 ## Features
 
@@ -229,5 +231,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Acknowledgments
 
-- Thanks to all contributors who have helped with the development of this project
 - Special thanks to the Angular and Spring Boot communities for their excellent documentation and support
